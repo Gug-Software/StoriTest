@@ -1,10 +1,12 @@
 package com.jkgug.example.storitest.ui.components.signup
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,28 +25,25 @@ fun SignUpBottomContent(
     onSignInClick: () -> Unit,
     modifier: Modifier
 ) {
-
     val smallPadding = dimensionResource(R.dimen.padding_s)
-
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Text(
             text = stringResource(R.string.signup_account),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.secondary
         )
-
         Spacer(modifier = Modifier.width(smallPadding))
-
         TextButton(
             modifier = Modifier,
             onClick = onSignInClick
         ) {
             Text(
                 text = stringResource(R.string.signup_signin),
-                fontSize = 16.sp
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
@@ -52,6 +51,14 @@ fun SignUpBottomContent(
 }
 
 @Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 @Composable
 fun SignUpBottomContentPreview() {
     StoriTestTheme {

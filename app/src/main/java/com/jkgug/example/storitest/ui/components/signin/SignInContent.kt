@@ -40,7 +40,6 @@ fun SignInContent(
 ) {
 
     val xlPadding = dimensionResource(R.dimen.padding_xl)
-    val mediumPadding = dimensionResource(R.dimen.padding_m)
     val cardElevation = dimensionResource(R.dimen.card_elevation)
 
     Column(
@@ -78,6 +77,7 @@ fun SignInContent(
                 PasswordField(
                     onUserPasswordChanged = onUserPasswordChanged,
                     userPasswordValue = userPasswordValue,
+                    onKeyboardDoneActions = onCheckSignIn,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -94,7 +94,7 @@ fun SignInContent(
             ) {
                 Text(
                     text = stringResource(R.string.sigin_button),
-                    fontSize = 16.sp
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
         }

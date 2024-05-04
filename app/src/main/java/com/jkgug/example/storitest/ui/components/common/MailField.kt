@@ -43,6 +43,7 @@ fun MailField(
     }
 
     TextField(
+        singleLine = true,
         value = userMailValue,
         onValueChange = onUserMailChanged,
         modifier = modifier,

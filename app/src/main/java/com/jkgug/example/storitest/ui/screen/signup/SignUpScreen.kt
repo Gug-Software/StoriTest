@@ -1,43 +1,47 @@
-package com.jkgug.example.storitest.ui.screen
+package com.jkgug.example.storitest.ui.screen.signup
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.ui.components.signin.SignInBottomContent
-import com.jkgug.example.storitest.ui.components.signin.SignInContent
 import com.jkgug.example.storitest.ui.components.signup.SignUpBottomContent
 import com.jkgug.example.storitest.ui.components.signup.SignUpContent
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable
 fun SignUpScreen(
-    modifier: Modifier = Modifier
+    viewModel: SignUpViewModel = viewModel()
 ) {
 
     val mediumPadding = dimensionResource(R.dimen.padding_m)
+    val uiState by viewModel.uiState.collectAsState()
 
     ConstraintLayout(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(mediumPadding)
     ) {
         val (topContent, bottomContent) = createRefs()
         SignUpContent(
-            onSignInClick = { },
+            onUserNameChanged = { viewModel.updateUserName(it) },
+            userNameValue = viewModel.userName,
+            onUserLastNameChanged = { viewModel.updateUserLastName(it) },
+            userLastNameValue = viewModel.userLastName,
+            onUserMailChanged = { viewModel.updateUserMail(it) },
+            userMailValue = viewModel.userMail,
+            isValidaMail = uiState.isValidEmail,
+            onUserPasswordChanged = { viewModel.updateUserPassword(it) },
+            userPasswordValue = viewModel.userPassword,
+            enabledSignInButton = uiState.enabledSignInButton,
+            onCheckSignUp = { viewModel.checkSignUp() },
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(topContent) {
@@ -63,7 +67,7 @@ fun SignUpScreen(
 fun SignUpContentPreview() {
     StoriTestTheme {
         SignUpScreen(
-            modifier = Modifier.padding(16.dp)
+            viewModel = SignUpViewModel()
         )
     }
 }

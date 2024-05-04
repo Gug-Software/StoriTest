@@ -17,7 +17,7 @@ import com.jkgug.example.storitest.ui.navigation.SignUp
 import com.jkgug.example.storitest.ui.screen.HomeScreen
 import com.jkgug.example.storitest.ui.screen.MovementDetailsScreen
 import com.jkgug.example.storitest.ui.screen.signin.SignInScreen
-import com.jkgug.example.storitest.ui.screen.SignUpScreen
+import com.jkgug.example.storitest.ui.screen.signup.SignUpScreen
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable

@@ -1,4 +1,4 @@
-package com.jkgug.example.storitest.ui.screen.signin
+package com.jkgug.example.storitest.ui.screen.signup
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,10 +10,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SignInViewModel : ViewModel() {
+class SignUpViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SignInUiState())
-    val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(SignUpUiState())
+    val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
+
+    var userName by mutableStateOf("")
+        private set
+
+    var userLastName by mutableStateOf("")
+        private set
 
     var userMail by mutableStateOf("")
         private set
@@ -26,9 +32,17 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun initScreen() {
-        _uiState.value = SignInUiState(
+        _uiState.value = SignUpUiState(
             loading = false
         )
+    }
+
+    fun updateUserName(userName: String) {
+        this.userName = userName
+    }
+
+    fun updateUserLastName(userLastName: String) {
+        this.userLastName = userLastName
     }
 
     fun updateUserMail(userMail: String) {
@@ -61,10 +75,7 @@ class SignInViewModel : ViewModel() {
         }
     }
 
-    fun checkSignIn() {
-        _uiState.update { currentState ->
-            currentState.copy(navigateToHome = false, errorInCredentials = false)
-        }
+    fun checkSignUp() {
         if (userMail.isNotEmpty() && userPassword == "admin") {
             _uiState.update { currentState ->
                 currentState.copy(navigateToHome = true)

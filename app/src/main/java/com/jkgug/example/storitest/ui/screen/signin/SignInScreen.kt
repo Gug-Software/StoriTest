@@ -41,8 +41,7 @@ fun SignInScreen(
             LocalContext.current,
             R.string.user_field_mail_placeholder,
             Toast.LENGTH_SHORT
-        )
-            .show()
+        ).show()
     }
 
     ConstraintLayout(

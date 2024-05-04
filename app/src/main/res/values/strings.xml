@@ -11,6 +11,7 @@
     <string name="signup_title">Create account</string>
     <string name="signup_account">Already have an account?</string>
     <string name="signup_signin">Sign In</string>
+    <string name="signup_button">Sign Up</string>
 
     <string name="user_field_name_hint">Name</string>
     <string name="user_field_lastname_hint">Last Name</string>
