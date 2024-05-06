@@ -72,7 +72,7 @@ class SignUpViewModel(
         val userData = getCurrentUserData()
         viewModelScope.launch {
             try {
-                signUpRepository.createUserWithEmailAndPassword(userData)
+                signUpRepository.createUserWithEmailAndPassword(userMail, userPassword)
                     .collect { createResult ->
                         when (createResult) {
                             is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
@@ -85,12 +85,7 @@ class SignUpViewModel(
         }
     }
 
-    private fun getCurrentUserData() = UserData(
-        userName = userName,
-        userLastName = userLastName,
-        userMail = userMail,
-        password = userPassword
-    )
+    private fun getCurrentUserData() = UserData(userName = userName, userLastName = userLastName)
 
     private suspend fun saveUserInFireStore(userData: UserData) {
         signUpRepository.saveUserData(userData).collect { saveResult ->

@@ -1,5 +1,6 @@
 package com.jkgug.example.storitest.ui.components
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +24,8 @@ import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 @Composable
 fun StoriTestNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = navController,
@@ -43,7 +45,8 @@ fun StoriTestNavHost(
                     navController.navigate(Home.route) {
                         popUpToTop(navController)
                     }
-                }
+                },
+                snackBarHostState = snackBarHostState
             )
         }
 
@@ -56,7 +59,8 @@ fun StoriTestNavHost(
                     navController.navigate(Home.route) {
                         popUpToTop(navController)
                     }
-                }
+                },
+                snackBarHostState = snackBarHostState
             )
         }
 

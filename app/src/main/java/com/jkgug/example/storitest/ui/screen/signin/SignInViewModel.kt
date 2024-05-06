@@ -32,9 +32,7 @@ class SignInViewModel(
     }
 
     private fun initScreen() {
-        _uiState.value = SignInUiState(
-            loading = false
-        )
+        _uiState.value = SignInUiState(loading = false)
     }
 
     fun updateUserMail(userMail: String) {
@@ -46,19 +44,6 @@ class SignInViewModel(
     fun updateUserPassword(userPassword: String) {
         this.userPassword = userPassword
         checkEnabledSignInButton()
-    }
-
-    private fun checkUserMail() {
-        _uiState.update { currentState ->
-            currentState.copy(isValidEmail = isValidEmail(userMail))
-        }
-    }
-
-    private fun checkEnabledSignInButton() {
-        val enabledButton = userMail.isNotEmpty() && userPassword.isNotEmpty()
-        _uiState.update { currentState ->
-            currentState.copy(enabledSignInButton = enabledButton)
-        }
     }
 
     fun checkSignIn() {
@@ -78,8 +63,19 @@ class SignInViewModel(
         }
     }
 
-    fun snackbarMessageShown() {
+    fun snackBarMessageShown() {
         _uiState.update { it.copy(messageForUser = null) }
+    }
+
+    private fun checkEnabledSignInButton() {
+        val enabledButton = userMail.isNotEmpty() && userPassword.isNotEmpty()
+        _uiState.update { currentState ->
+            currentState.copy(enabledSignInButton = enabledButton)
+        }
+    }
+
+    private fun checkUserMail() {
+        _uiState.update { currentState -> currentState.copy(isValidEmail = isValidEmail(userMail)) }
     }
 
     private fun updateMessageErrorForUser(message: String?) {

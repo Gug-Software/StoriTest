@@ -9,19 +9,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.withContext
 
 class SingUpRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val firestore: FirebaseFirestore
 ) : SignUpRepository {
 
     override suspend fun createUserWithEmailAndPassword(
-        userData: UserData
+        userMail: String,
+        userPassword: String
     ): Flow<NetworkResult<Any?>> =
         callbackFlow {
-            firebaseAuth.createUserWithEmailAndPassword(userData.userMail, userData.password)
+            firebaseAuth.createUserWithEmailAndPassword(userMail, userPassword)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         trySend(NetworkResult.Success(task.result.user))

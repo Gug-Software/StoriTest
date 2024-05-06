@@ -24,27 +24,18 @@ class StoriTestModule {
 
             // Repository
             single<SignUpRepository> {
-                SingUpRepositoryImpl(
-                    firebaseAuth = get(),
-                    firestore = get(),
-                )
+                SingUpRepositoryImpl(firebaseAuth = get(), firestore = get())
             }
             single<SignInRepository> {
-                SignInRepositoryImpl(
-                    firebaseAuth = get()
-                )
+                SignInRepositoryImpl(firebaseAuth = get())
             }
 
             // viewmodel
             viewModel {
-                SignUpViewModel(
-                    signUpRepository = get()
-                )
+                SignUpViewModel(signUpRepository = get())
             }
             viewModel {
-                SignInViewModel(
-                    signInRepository = get()
-                )
+                SignInViewModel(signInRepository = get())
             }
 
         }

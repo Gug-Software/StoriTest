@@ -27,75 +27,67 @@ import org.koin.androidx.compose.koinViewModel
 fun SignUpScreen(
     onHomeNavigation: () -> Unit,
     viewModel: SignUpViewModel = koinViewModel(),
+    snackBarHostState: SnackbarHostState,
 ) {
 
-    val snackBarHostState = remember { SnackbarHostState() }
     val mediumPadding = dimensionResource(R.dimen.padding_m)
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
-        },
-    ) { _ ->
-
-        if (uiState.navigateToHome) {
-            LaunchedEffect(Unit) {
-                scope.launch {
-                    onHomeNavigation.invoke()
-                }
-            }
-        }
-
-        uiState.messageForUser?.let { userMessage ->
-            LaunchedEffect(userMessage) {
-                snackBarHostState.showSnackbar(userMessage)
-                viewModel.snackBarMessageShown()
-
-            }
-        }
-
-        ConstraintLayout(
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(mediumPadding)
+    ) {
+        val (topContent, bottomContent) = createRefs()
+        SignUpContent(
+            onUserNameChanged = { viewModel.updateUserName(it) },
+            userNameValue = viewModel.userName,
+            onUserLastNameChanged = { viewModel.updateUserLastName(it) },
+            userLastNameValue = viewModel.userLastName,
+            onUserMailChanged = { viewModel.updateUserMail(it) },
+            userMailValue = viewModel.userMail,
+            onUserPasswordChanged = { viewModel.updateUserPassword(it) },
+            userPasswordValue = viewModel.userPassword,
+            isValidaMail = uiState.isValidEmail,
+            enabledSignInButton = uiState.enabledSignInButton,
+            onCheckSignUp = { viewModel.checkSignUp() },
+            isLoading = uiState.loading,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(mediumPadding)
-        ) {
-            val (topContent, bottomContent) = createRefs()
-            SignUpContent(
-                onUserNameChanged = { viewModel.updateUserName(it) },
-                userNameValue = viewModel.userName,
-                onUserLastNameChanged = { viewModel.updateUserLastName(it) },
-                userLastNameValue = viewModel.userLastName,
-                onUserMailChanged = { viewModel.updateUserMail(it) },
-                userMailValue = viewModel.userMail,
-                onUserPasswordChanged = { viewModel.updateUserPassword(it) },
-                userPasswordValue = viewModel.userPassword,
-                isValidaMail = uiState.isValidEmail,
-                enabledSignInButton = uiState.enabledSignInButton,
-                onCheckSignUp = { viewModel.checkSignUp() },
-                isLoading = uiState.loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(topContent) {
-                        centerHorizontallyTo(parent)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(bottomContent.top)
-                    }
-            )
-            SignUpBottomContent(
-                onSignInClick = {},
-                isLoading = uiState.loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(bottomContent) {
-                        centerHorizontallyTo(parent)
-                        bottom.linkTo(parent.bottom)
-                    }
-            )
+                .fillMaxWidth()
+                .constrainAs(topContent) {
+                    centerHorizontallyTo(parent)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(bottomContent.top)
+                }
+        )
+        SignUpBottomContent(
+            onSignInClick = {},
+            isLoading = uiState.loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(bottomContent) {
+                    centerHorizontallyTo(parent)
+                    bottom.linkTo(parent.bottom)
+                }
+        )
+    }
+
+    if (uiState.navigateToHome) {
+        LaunchedEffect(Unit) {
+            scope.launch {
+                onHomeNavigation.invoke()
+            }
         }
     }
 
+    uiState.messageForUser?.let { userMessage ->
+        LaunchedEffect(userMessage) {
+            snackBarHostState.showSnackbar(userMessage)
+            viewModel.snackBarMessageShown()
+
+        }
+    }
 
 }
 
@@ -105,7 +97,8 @@ fun SignUpContentPreview() {
     StoriTestTheme {
         SignUpScreen(
             onHomeNavigation = {},
-            viewModel = SignUpViewModel(koinViewModel())
+            viewModel = SignUpViewModel(koinViewModel()),
+            snackBarHostState = SnackbarHostState()
         )
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -104,7 +105,7 @@ fun SignUpContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(mediumPadding),
+                .heightIn(60.dp),
             contentAlignment = Alignment.CenterEnd,
         ) {
             if (isLoading) {
