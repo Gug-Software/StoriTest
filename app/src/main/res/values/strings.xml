@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">StoriTest</string>
+    <string name="stori">STORI</string>
 
     <string name="sigin_title">Login</string>
     <string name="sigin_description">Please sign in to continue</string>
@@ -18,5 +19,9 @@
     <string name="user_field_mail_hint">Email</string>
     <string name="user_field_mail_placeholder">Please enter a valid email.</string>
     <string name="user_field_password_hint">Password</string>
+
+    <string name="home_title">Movements details</string>
+    <string name="home_message">Control your finances easily</string>
+    <string name="home_hello">Hello!</string>
 
 </resources>

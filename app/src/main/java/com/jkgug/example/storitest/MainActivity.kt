@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun StoriTestApp() {
+
     StoriTestTheme {
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }

@@ -9,8 +9,16 @@
     <dimen name="padding_m">16dp</dimen>
     <dimen name="padding_l">24dp</dimen>
     <dimen name="padding_xl">32dp</dimen>
+    <dimen name="padding_xxl">48dp</dimen>
 
     <dimen name="tonal_elevation">1dp</dimen>
+
+    <dimen name="radius_s">8dp</dimen>
+    <dimen name="radius_m">16dp</dimen>
+    <dimen name="radius_l">24dp</dimen>
+    <dimen name="radius_xxl">48dp</dimen>
+
+    <dimen name="size_image_item_movement">64dp</dimen>
 
 
 </resources>

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jkgug.example.storitest.data.UserData
 import com.jkgug.example.storitest.data.repository.signin.SignInRepository
 import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
@@ -53,8 +54,8 @@ class SignInViewModel(
                 signInRepository.signInWithEmailAndPassword(userMail, userPassword)
                     .collect { networkResult ->
                         when (networkResult) {
+                            is NetworkResult.Success -> getUserDataAndSaveLocally(networkResult.data as String)
                             is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
-                            is NetworkResult.Success -> _uiState.update { it.copy(navigateToHome = true) }
                         }
                     }
             } catch (e: Exception) {
@@ -65,6 +66,25 @@ class SignInViewModel(
 
     fun snackBarMessageShown() {
         _uiState.update { it.copy(messageForUser = null) }
+    }
+
+    private suspend fun getUserDataAndSaveLocally(firebaseUserId: String) {
+        signInRepository.getUserDataFireStore(firebaseUserId)
+            .collect { networkResult ->
+                when (networkResult) {
+                    is NetworkResult.Success -> saveLocallyUserData(networkResult.data as UserData)
+                    is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
+                }
+            }
+    }
+
+    private suspend fun saveLocallyUserData(userData: UserData) {
+        signInRepository.saveLocallyUserData(userData)
+        navigateToHome()
+    }
+
+    private fun navigateToHome() {
+        _uiState.update { it.copy(navigateToHome = true) }
     }
 
     private fun checkEnabledSignInButton() {

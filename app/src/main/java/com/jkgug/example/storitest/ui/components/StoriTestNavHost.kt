@@ -15,7 +15,7 @@ import com.jkgug.example.storitest.ui.navigation.Home
 import com.jkgug.example.storitest.ui.navigation.MovementDetails
 import com.jkgug.example.storitest.ui.navigation.SignIn
 import com.jkgug.example.storitest.ui.navigation.SignUp
-import com.jkgug.example.storitest.ui.screen.HomeScreen
+import com.jkgug.example.storitest.ui.screen.home.HomeScreen
 import com.jkgug.example.storitest.ui.screen.MovementDetailsScreen
 import com.jkgug.example.storitest.ui.screen.signin.SignInScreen
 import com.jkgug.example.storitest.ui.screen.signup.SignUpScreen
@@ -29,7 +29,7 @@ fun StoriTestNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = SignIn.route,
+        startDestination = Home.route,
         modifier = modifier
     ) {
 

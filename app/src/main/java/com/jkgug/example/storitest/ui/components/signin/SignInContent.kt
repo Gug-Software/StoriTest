@@ -108,7 +108,6 @@ fun SignInContent(
                 ) {
                     Text(
                         text = stringResource(R.string.sigin_button),
-                        style = MaterialTheme.typography.bodySmall,
                     )
                 }
             }

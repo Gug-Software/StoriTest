@@ -20,4 +20,8 @@
     <string name="user_field_mail_placeholder">Por favor ingresa un email valido.</string>
     <string name="user_field_password_hint">Contraseña</string>
 
+    <string name="home_title">Detalle de movimientos</string>
+    <string name="home_message">Controla tus finanzas fácilmente</string>
+    <string name="home_hello">Hola!</string>
+
 </resources>

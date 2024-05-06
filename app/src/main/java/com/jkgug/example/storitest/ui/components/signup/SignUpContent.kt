@@ -122,7 +122,6 @@ fun SignUpContent(
                 ) {
                     Text(
                         text = stringResource(R.string.signup_button),
-                        style = MaterialTheme.typography.bodySmall,
                     )
                 }
             }
@@ -156,7 +155,7 @@ fun SignUpContentPreview() {
             enabledSignInButton = false,
             onCheckSignUp = {},
             modifier = Modifier.fillMaxWidth(),
-            isLoading = true,
+            isLoading = false,
         )
     }
 }

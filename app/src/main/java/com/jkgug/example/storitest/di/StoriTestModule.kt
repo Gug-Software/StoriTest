@@ -1,14 +1,22 @@
 package com.jkgug.example.storitest.di
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.jkgug.example.storitest.data.repository.home.HomeRepository
+import com.jkgug.example.storitest.data.repository.home.HomeRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signin.SignInRepository
 import com.jkgug.example.storitest.data.repository.signin.SignInRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signup.SignUpRepository
 import com.jkgug.example.storitest.data.repository.signup.SingUpRepositoryImpl
+import com.jkgug.example.storitest.ui.screen.home.HomeViewModel
 import com.jkgug.example.storitest.ui.screen.signin.SignInViewModel
 import com.jkgug.example.storitest.ui.screen.signup.SignUpViewModel
+import com.jkgug.example.storitest.utils.PREFERENCES_FILE_KEY
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,13 +29,24 @@ class StoriTestModule {
             // Firebase
             single { FirebaseAuth.getInstance() }
             single { Firebase.firestore }
+            single { provideSettingsPreferences(androidApplication()) }
 
             // Repository
             single<SignUpRepository> {
                 SingUpRepositoryImpl(firebaseAuth = get(), firestore = get())
             }
             single<SignInRepository> {
-                SignInRepositoryImpl(firebaseAuth = get())
+                SignInRepositoryImpl(
+                    firebaseAuth = get(),
+                    firestore = get(),
+                    sharedPreferences = get()
+                )
+            }
+            single<HomeRepository> {
+                HomeRepositoryImpl(
+                    firestore = get(),
+                    sharedPreferences = get()
+                )
             }
 
             // viewmodel
@@ -37,8 +56,15 @@ class StoriTestModule {
             viewModel {
                 SignInViewModel(signInRepository = get())
             }
+            viewModel {
+                HomeViewModel(homeRepository = get())
+            }
 
         }
 
+        private fun provideSettingsPreferences(app: Application): SharedPreferences =
+            app.getSharedPreferences(PREFERENCES_FILE_KEY, Context.MODE_PRIVATE)
+
     }
+
 }

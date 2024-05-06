@@ -72,7 +72,6 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
