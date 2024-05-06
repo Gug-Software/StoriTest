@@ -17,14 +17,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable
 fun SignInBottomContent(
     onSignInClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    isLoading: Boolean
 ) {
     val smallPadding = dimensionResource(R.dimen.padding_xs)
     Row(
@@ -40,6 +40,7 @@ fun SignInBottomContent(
         Spacer(modifier = Modifier.width(smallPadding))
         TextButton(
             modifier = Modifier,
+            enabled = isLoading.not(),
             onClick = onSignInClick
         ) {
             Text(
@@ -67,7 +68,8 @@ fun SignInBottomContentPreview() {
             onSignInClick = {},
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp),
+            isLoading = false
         )
     }
 }

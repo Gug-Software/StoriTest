@@ -4,27 +4,34 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jkgug.example.storitest.data.UserData
+import com.jkgug.example.storitest.data.repository.signup.SignUpRepository
+import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(
+    private val signUpRepository: SignUpRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
-    var userName by mutableStateOf("")
+    var userName by mutableStateOf("test1")
         private set
 
-    var userLastName by mutableStateOf("")
+    var userLastName by mutableStateOf("test1")
         private set
 
-    var userMail by mutableStateOf("")
+    var userMail by mutableStateOf("test1@gmail.com")
         private set
 
-    var userPassword by mutableStateOf("")
+    var userPassword by mutableStateOf("1234")
         private set
 
     init {
@@ -32,17 +39,17 @@ class SignUpViewModel : ViewModel() {
     }
 
     private fun initScreen() {
-        _uiState.value = SignUpUiState(
-            loading = false
-        )
+        _uiState.value = SignUpUiState(loading = false)
     }
 
     fun updateUserName(userName: String) {
         this.userName = userName
+        checkEnabledSignInButton()
     }
 
     fun updateUserLastName(userLastName: String) {
         this.userLastName = userLastName
+        checkEnabledSignInButton()
     }
 
     fun updateUserMail(userMail: String) {
@@ -56,35 +63,65 @@ class SignUpViewModel : ViewModel() {
         checkEnabledSignInButton()
     }
 
-    private fun checkUserMail() {
-        if (isValidEmail(userMail)) {
-            _uiState.update { currentState ->
-                currentState.copy(isValidEmail = true)
-            }
-        } else {
-            _uiState.update { currentState ->
-                currentState.copy(isValidEmail = false)
+    fun snackBarMessageShown() {
+        _uiState.update { it.copy(messageForUser = null) }
+    }
+
+    fun checkSignUp() {
+        _uiState.update { currentState -> currentState.copy(loading = true) }
+        val userData = getCurrentUserData()
+        viewModelScope.launch {
+            try {
+                signUpRepository.createUserWithEmailAndPassword(userData)
+                    .collect { createResult ->
+                        when (createResult) {
+                            is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
+                            is NetworkResult.Success -> saveUserInFireStore(userData)
+                        }
+                    }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(messageForUser = e.message) }
             }
         }
     }
 
+    private fun getCurrentUserData() = UserData(
+        userName = userName,
+        userLastName = userLastName,
+        userMail = userMail,
+        password = userPassword
+    )
+
+    private suspend fun saveUserInFireStore(userData: UserData) {
+        signUpRepository.saveUserData(userData).collect { saveResult ->
+            when (saveResult) {
+                is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
+                is NetworkResult.Success -> _uiState.update { it.copy(navigateToHome = true) }
+            }
+        }
+    }
+
+    private fun updateMessageErrorForUser(message: String?) {
+        message?.let { message ->
+            _uiState.update { it.copy(messageForUser = message, loading = false) }
+        }
+    }
+
+    private fun checkUserMail() {
+        _uiState.update { currentState ->
+            currentState.copy(isValidEmail = isValidEmail(userMail))
+        }
+    }
+
     private fun checkEnabledSignInButton() {
-        val enabledButton = userMail.isNotEmpty() && userPassword.isNotEmpty()
+        val enabledButton = userMail.isNotEmpty()
+                && userPassword.isNotEmpty()
+                && userName.isNotEmpty()
+                && userLastName.isNotEmpty()
         _uiState.update { currentState ->
             currentState.copy(enabledSignInButton = enabledButton)
         }
     }
 
-    fun checkSignUp() {
-        if (userMail.isNotEmpty() && userPassword == "admin") {
-            _uiState.update { currentState ->
-                currentState.copy(navigateToHome = true)
-            }
-        } else {
-            _uiState.update { currentState ->
-                currentState.copy(errorInCredentials = true, navigateToHome = false)
-            }
-        }
-    }
 
 }

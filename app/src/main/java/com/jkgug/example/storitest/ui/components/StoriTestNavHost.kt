@@ -50,7 +50,14 @@ fun StoriTestNavHost(
         composable(
             route = SignUp.route,
         ) {
-            SignUpScreen()
+            SignUpScreen(
+                onHomeNavigation = {
+                    //navController.navigateSingleTopTo(Home.route)
+                    navController.navigate(Home.route) {
+                        popUpToTop(navController)
+                    }
+                }
+            )
         }
 
         composable(
@@ -71,9 +78,7 @@ fun StoriTestNavHost(
 @Preview(showBackground = true)
 @Composable
 fun StoriTestNavHostPreview() {
-    StoriTestTheme {
-        StoriTestApp("Android")
-    }
+    StoriTestTheme { StoriTestApp() }
 }
 
 fun NavHostController.navigateSingleTopTo(route: String) =

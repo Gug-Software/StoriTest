@@ -4,21 +4,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jkgug.example.storitest.data.repository.signin.SignInRepository
+import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SignInViewModel : ViewModel() {
+class SignInViewModel(
+    private val signInRepository: SignInRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
-    var userMail by mutableStateOf("")
+    var userMail by mutableStateOf("test1@gmail.com")
         private set
 
-    var userPassword by mutableStateOf("")
+    var userPassword by mutableStateOf("12345")
         private set
 
     init {
@@ -43,14 +49,8 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun checkUserMail() {
-        if (isValidEmail(userMail)) {
-            _uiState.update { currentState ->
-                currentState.copy(isValidEmail = true)
-            }
-        } else {
-            _uiState.update { currentState ->
-                currentState.copy(isValidEmail = false)
-            }
+        _uiState.update { currentState ->
+            currentState.copy(isValidEmail = isValidEmail(userMail))
         }
     }
 
@@ -62,17 +62,29 @@ class SignInViewModel : ViewModel() {
     }
 
     fun checkSignIn() {
-        _uiState.update { currentState ->
-            currentState.copy(navigateToHome = false, errorInCredentials = false)
+        _uiState.update { currentState -> currentState.copy(loading = true) }
+        viewModelScope.launch {
+            try {
+                signInRepository.signInWithEmailAndPassword(userMail, userPassword)
+                    .collect { networkResult ->
+                        when (networkResult) {
+                            is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
+                            is NetworkResult.Success -> _uiState.update { it.copy(navigateToHome = true) }
+                        }
+                    }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(messageForUser = e.message) }
+            }
         }
-        if (userMail.isNotEmpty() && userPassword == "admin") {
-            _uiState.update { currentState ->
-                currentState.copy(navigateToHome = true)
-            }
-        } else {
-            _uiState.update { currentState ->
-                currentState.copy(errorInCredentials = true, navigateToHome = false)
-            }
+    }
+
+    fun snackbarMessageShown() {
+        _uiState.update { it.copy(messageForUser = null) }
+    }
+
+    private fun updateMessageErrorForUser(message: String?) {
+        message?.let { message ->
+            _uiState.update { it.copy(messageForUser = message, loading = false) }
         }
     }
 

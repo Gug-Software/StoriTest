@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +22,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.components.common.MailField
 import com.jkgug.example.storitest.ui.components.common.PasswordField
@@ -37,8 +37,10 @@ fun SignInContent(
     enabledSignInButton: Boolean,
     onCheckSignIn: () -> Unit,
     modifier: Modifier,
+    isLoading: Boolean,
 ) {
 
+    val mediumPadding = dimensionResource(R.dimen.padding_m)
     val xlPadding = dimensionResource(R.dimen.padding_xl)
     val cardElevation = dimensionResource(R.dimen.card_elevation)
 
@@ -72,13 +74,15 @@ fun SignInContent(
                     onUserMailChanged = onUserMailChanged,
                     userMailValue = userMailValue,
                     isValidMail = isValidaMail,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
                 PasswordField(
                     onUserPasswordChanged = onUserPasswordChanged,
                     userPasswordValue = userPasswordValue,
                     onKeyboardDoneActions = onCheckSignIn,
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
             }
         }
@@ -87,20 +91,26 @@ fun SignInContent(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.TopEnd,
         ) {
-            Button(
-                modifier = Modifier,
-                enabled = enabledSignInButton,
-                onClick = onCheckSignIn
-            ) {
-                Text(
-                    text = stringResource(R.string.sigin_button),
-                    style = MaterialTheme.typography.bodySmall,
+            if (isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = mediumPadding)
                 )
+            } else {
+                Button(
+                    modifier = Modifier,
+                    enabled = enabledSignInButton,
+                    onClick = onCheckSignIn
+                ) {
+                    Text(
+                        text = stringResource(R.string.sigin_button),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
-
     }
-
 }
 
 @Preview(showBackground = true)
@@ -122,10 +132,11 @@ fun SignInContentPreview() {
             onUserPasswordChanged = {},
             userPasswordValue = "algo",
             enabledSignInButton = true,
+            onCheckSignIn = { },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            onCheckSignIn = { }
+            isLoading = false
 
         )
     }

@@ -1,14 +1,12 @@
 package com.jkgug.example.storitest.ui.components.common
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +28,8 @@ fun MailField(
     onUserMailChanged: (String) -> Unit,
     userMailValue: String,
     isValidMail: Boolean,
-    modifier: Modifier
+    enabled: Boolean = true,
+    modifier: Modifier,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -71,7 +70,8 @@ fun MailField(
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
-        isError = isValidMail.not()
+        isError = isValidMail.not(),
+        enabled = enabled
     )
 }
 
@@ -93,7 +93,8 @@ fun MailFieldPreview() {
             isValidMail = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            enabled = true
 
         )
     }

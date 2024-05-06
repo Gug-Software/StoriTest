@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,8 @@ fun SignUpContent(
     userPasswordValue: String,
     enabledSignInButton: Boolean,
     onCheckSignUp: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    isLoading: Boolean
 ) {
 
     val mediumPadding = dimensionResource(R.dimen.padding_m)
@@ -50,13 +52,11 @@ fun SignUpContent(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(mediumPadding),
     ) {
-
         Text(
             text = stringResource(R.string.signup_title),
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.primary
         )
-
         Spacer(modifier = Modifier.height(xlPadding))
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -73,45 +73,57 @@ fun SignUpContent(
                     placeHolderString = stringResource(R.string.user_field_name_hint),
                     onValueChanged = onUserNameChanged,
                     value = userNameValue,
-                    showIsError = false,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
                 CommonFormField(
                     placeHolderString = stringResource(R.string.user_field_lastname_hint),
                     onValueChanged = onUserLastNameChanged,
                     value = userLastNameValue,
-                    showIsError = false,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
                 MailField(
                     onUserMailChanged = onUserMailChanged,
                     userMailValue = userMailValue,
                     isValidMail = isValidaMail,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
                 PasswordField(
                     onUserPasswordChanged = onUserPasswordChanged,
                     userPasswordValue = userPasswordValue,
                     onKeyboardDoneActions = onCheckSignUp,
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = isLoading.not(),
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(xlPadding))
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopEnd,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(mediumPadding),
+            contentAlignment = Alignment.CenterEnd,
         ) {
-            Button(
-                modifier = Modifier,
-                enabled = enabledSignInButton,
-                onClick = onCheckSignUp
-            ) {
-                Text(
-                    text = stringResource(R.string.signup_button),
-                    style = MaterialTheme.typography.bodySmall,
+            if (isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = mediumPadding)
                 )
+            } else {
+                Button(
+                    modifier = Modifier.padding(start = mediumPadding),
+                    enabled = enabledSignInButton,
+                    onClick = onCheckSignUp
+                ) {
+                    Text(
+                        text = stringResource(R.string.signup_button),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
 
@@ -143,6 +155,7 @@ fun SignUpContentPreview() {
             enabledSignInButton = false,
             onCheckSignUp = {},
             modifier = Modifier.fillMaxWidth(),
+            isLoading = true,
         )
     }
 }

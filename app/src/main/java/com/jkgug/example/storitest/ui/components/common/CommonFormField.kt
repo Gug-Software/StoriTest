@@ -27,6 +27,7 @@ fun CommonFormField(
     onValueChanged: (String) -> Unit,
     value: String,
     showIsError: Boolean = false,
+    enabled: Boolean = true,
     modifier: Modifier
 ) {
 
@@ -59,7 +60,8 @@ fun CommonFormField(
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         ),
-        isError = showIsError
+        isError = showIsError,
+        enabled = enabled
     )
 }
 
@@ -81,7 +83,8 @@ fun CommonFormFieldPreview() {
             value = "Alo",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            enabled = true
 
         )
     }

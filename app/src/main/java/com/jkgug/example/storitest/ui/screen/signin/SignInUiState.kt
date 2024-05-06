@@ -6,4 +6,5 @@ data class SignInUiState(
     val enabledSignInButton: Boolean = false,
     val navigateToHome: Boolean = false,
     val errorInCredentials: Boolean = false,
+    val messageForUser: String? = null,
 )

@@ -10,7 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.jkgug.example.storitest.ui.components.StoriTestNavHost
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
@@ -19,19 +18,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            StoriTestApp(name = "algo")
-        }
+        setContent { StoriTestApp() }
     }
 }
 
 @Composable
-fun StoriTestApp(
-    name: String
-) {
+fun StoriTestApp() {
     StoriTestTheme {
         val navController = rememberNavController()
-        Surface(tonalElevation = dimensionResource(id = R.dimen.tonal_elevation)) {
+        Surface(
+            tonalElevation = dimensionResource(id = R.dimen.tonal_elevation)
+        ) {
             Scaffold { innerPadding ->
                 StoriTestNavHost(
                     navController = navController,

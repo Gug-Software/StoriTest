@@ -1,7 +1,6 @@
 package com.jkgug.example.storitest.ui.components.common
 
 import android.content.res.Configuration
-import android.database.sqlite.SQLiteDoneException
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -21,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,7 +35,8 @@ fun PasswordField(
     onUserPasswordChanged: (String) -> Unit,
     userPasswordValue: String,
     onKeyboardDoneActions: () -> Unit,
-    modifier: Modifier
+    enabled: Boolean = true,
+    modifier: Modifier,
 ) {
 
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -78,8 +77,8 @@ fun PasswordField(
             keyboardType = KeyboardType.Password,
         ),
         keyboardActions = KeyboardActions(onDone = { onKeyboardDoneActions }),
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
-
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        enabled = enabled
     )
 }
 
@@ -101,7 +100,8 @@ fun PasswordFieldPreview() {
             onKeyboardDoneActions = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            enabled = true
 
         )
     }

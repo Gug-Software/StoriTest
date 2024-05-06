@@ -1,99 +1,112 @@
 package com.jkgug.example.storitest.ui.screen.signin
 
-import android.content.res.Configuration
-import android.widget.Toast
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.components.signin.SignInBottomContent
 import com.jkgug.example.storitest.ui.components.signin.SignInContent
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
     onSignInNavigation: () -> Unit,
     onHomeNavigation: () -> Unit,
-    signInViewModel: SignInViewModel = viewModel()
+    viewModel: SignInViewModel = koinViewModel()
 ) {
 
     val mediumPadding = dimensionResource(R.dimen.padding_m)
-    val signInUiState by signInViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    if (signInUiState.navigateToHome) {
-        onHomeNavigation.invoke()
-    }
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        },
+    ) { _ ->
 
-    if (signInUiState.errorInCredentials) {
-        Toast.makeText(
-            LocalContext.current,
-            R.string.user_field_mail_placeholder,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(mediumPadding)
-    ) {
-        val (topContent, bottomContent) = createRefs()
-        SignInContent(
-            onUserMailChanged = { signInViewModel.updateUserMail(it) },
-            userMailValue = signInViewModel.userMail,
-            isValidaMail = signInUiState.isValidEmail,
-            onUserPasswordChanged = { signInViewModel.updateUserPassword(it) },
-            userPasswordValue = signInViewModel.userPassword,
-            enabledSignInButton = signInUiState.enabledSignInButton,
-            onCheckSignIn = { signInViewModel.checkSignIn() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(topContent) {
-                    centerHorizontallyTo(parent)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(bottomContent.top)
+        if (uiState.navigateToHome) {
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    onHomeNavigation.invoke()
                 }
-        )
-        SignInBottomContent(
-            onSignInClick = onSignInNavigation,
-            modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(bottomContent) {
-                    centerHorizontallyTo(parent)
-                    bottom.linkTo(parent.bottom)
-                }
-        )
-    }
+            }
+        }
 
+        uiState.messageForUser?.let { userMessage ->
+            LaunchedEffect(userMessage) {
+                scope.launch {
+                    snackBarHostState.showSnackbar(userMessage)
+                    viewModel.snackbarMessageShown()
+                }
+            }
+        }
+
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(mediumPadding)
+        ) {
+            val (topContent, bottomContent) = createRefs()
+            SignInContent(
+                onUserMailChanged = { viewModel.updateUserMail(it) },
+                userMailValue = viewModel.userMail,
+                isValidaMail = uiState.isValidEmail,
+                onUserPasswordChanged = { viewModel.updateUserPassword(it) },
+                userPasswordValue = viewModel.userPassword,
+                enabledSignInButton = uiState.enabledSignInButton,
+                onCheckSignIn = { viewModel.checkSignIn() },
+                isLoading = uiState.loading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(topContent) {
+                        centerHorizontallyTo(parent)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(bottomContent.top)
+                    }
+            )
+            SignInBottomContent(
+                onSignInClick = onSignInNavigation,
+                isLoading = uiState.loading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(bottomContent) {
+                        centerHorizontallyTo(parent)
+                        bottom.linkTo(parent.bottom)
+                    }
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-)
+@Preview(uiMode = UI_MODE_NIGHT_YES, name = "DefaultPreviewDark")
+@Preview(uiMode = UI_MODE_NIGHT_NO, name = "DefaultPreviewLight")
 @Composable
 fun SignInScreenPreview() {
     StoriTestTheme {
         SignInScreen(
             onSignInNavigation = { },
-            onHomeNavigation = { }
+            onHomeNavigation = { },
+            viewModel = SignInViewModel(koinViewModel())
         )
     }
 }

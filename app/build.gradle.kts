@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -62,6 +63,15 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.firebase:firebase-config:21.6.3")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("com.google.firebase:firebase-firestore:24.11.0")
+    implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation(libs.koin.android)
+    implementation("io.insert-koin:koin-androidx-compose:3.5.6")
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
 
     testImplementation(libs.junit)
 
