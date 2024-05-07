@@ -1,6 +1,6 @@
-package com.jkgug.example.storitest.data.repository.signup
+package com.jkgug.example.storitest.repository.remote.signup
 
-import com.jkgug.example.storitest.data.UserData
+import com.jkgug.example.storitest.domain.UserData
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.Flow
 

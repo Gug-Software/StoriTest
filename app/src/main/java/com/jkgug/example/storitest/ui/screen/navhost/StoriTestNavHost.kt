@@ -1,4 +1,4 @@
-package com.jkgug.example.storitest.ui.components
+package com.jkgug.example.storitest.ui.screen.navhost
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -20,7 +20,6 @@ import com.jkgug.example.storitest.ui.navigation.SignUp
 import com.jkgug.example.storitest.ui.navigation.Success
 import com.jkgug.example.storitest.ui.screen.home.HomeScreen
 import com.jkgug.example.storitest.ui.screen.details.MovementDetailsScreen
-import com.jkgug.example.storitest.ui.screen.navhost.NavHostViewModel
 import com.jkgug.example.storitest.ui.screen.signin.SignInScreen
 import com.jkgug.example.storitest.ui.screen.signup.SignUpScreen
 import com.jkgug.example.storitest.ui.screen.success.SuccessScreen

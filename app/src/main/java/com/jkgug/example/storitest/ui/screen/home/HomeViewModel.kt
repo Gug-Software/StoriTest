@@ -2,8 +2,10 @@ package com.jkgug.example.storitest.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jkgug.example.storitest.data.BankMovement
-import com.jkgug.example.storitest.data.repository.home.HomeRepository
+import com.jkgug.example.storitest.domain.BankMovement
+import com.jkgug.example.storitest.usecase.GetBankMovementsRemoteUseCase
+import com.jkgug.example.storitest.usecase.GetUserNameLocallyUseCase
+import com.jkgug.example.storitest.usecase.LogOutUserUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +14,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val homeRepository: HomeRepository
+    private val getUserNameLocallyUseCase: GetUserNameLocallyUseCase,
+    private val getBankMovementsRemoteUseCase: GetBankMovementsRemoteUseCase,
+    private val logOutUserUseCase: LogOutUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -24,33 +28,41 @@ class HomeViewModel(
         getMovementsData()
     }
 
-    private fun getUserLocalData() {
-        viewModelScope.launch {
-            val userName = homeRepository.getUserLocalData()
-            _uiState.update { it.copy(userName = userName) }
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
     fun getMovementsData() {
 
         updateStateAsInit()
 
         viewModelScope.launch {
-            homeRepository.getMovementsData().collect { networkResult ->
+            getBankMovementsRemoteUseCase.invoke().collect { networkResult ->
                 when (networkResult) {
                     is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
-                    is NetworkResult.Success -> {
-                        val movementsList = networkResult.data as MutableList<BankMovement>
-                        _uiState.update {
-                            it.copy(
-                                movements = movementsList.toList(),
-                                loadingContent = false
-                            )
-                        }
-                    }
+                    is NetworkResult.Success -> setMovementsListInUiState(networkResult)
                 }
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch { logOutUserUseCase.invoke() }
+        _uiState.update { it.copy(navigateToSignIn = true) }
+    }
+
+    private fun getUserLocalData() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(userName = getUserNameLocallyUseCase.invoke())
+            }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun setMovementsListInUiState(networkResult: NetworkResult<Any?>) {
+        val movementsList = networkResult.data as MutableList<BankMovement>
+        _uiState.update {
+            it.copy(
+                movements = movementsList.toList(),
+                loadingContent = false
+            )
         }
     }
 
@@ -68,11 +80,6 @@ class HomeViewModel(
         message?.let { messageUser ->
             _uiState.update { it.copy(messageForUser = messageUser, loadingContent = false) }
         }
-    }
-
-    fun logout() {
-        homeRepository.logout()
-        _uiState.update { it.copy(navigateToSignIn = true) }
     }
 
 }

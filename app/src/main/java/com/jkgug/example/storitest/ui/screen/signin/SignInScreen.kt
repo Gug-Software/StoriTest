@@ -96,7 +96,7 @@ fun SignInScreenPreview() {
         SignInScreen(
             onSignUpNavigation = { },
             onNavigateToHome = { },
-            viewModel = SignInViewModel(koinViewModel()),
+            viewModel = koinViewModel(),
             snackBarHostState = SnackbarHostState()
         )
     }

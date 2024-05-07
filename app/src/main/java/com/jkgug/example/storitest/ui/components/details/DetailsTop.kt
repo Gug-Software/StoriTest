@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable
@@ -32,10 +32,8 @@ fun DetailsTop(
     modifier: Modifier = Modifier
 ) {
 
-    val paddingXS = dimensionResource(R.dimen.padding_xs)
     val paddingM = dimensionResource(R.dimen.padding_m)
     val paddingL = dimensionResource(R.dimen.padding_l)
-    val paddingXXL = dimensionResource(R.dimen.padding_xxl)
     val paddingS = dimensionResource(R.dimen.padding_s)
     val cardElevation = dimensionResource(R.dimen.card_elevation)
     val radiusM = dimensionResource(R.dimen.radius_m)

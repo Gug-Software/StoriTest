@@ -95,7 +95,7 @@ fun SignUpContentPreview() {
     StoriTestTheme {
         SignUpScreen(
             onBackNavigation = {},
-            viewModel = SignUpViewModel(koinViewModel()),
+            viewModel = koinViewModel(),
             snackBarHostState = SnackbarHostState(),
             onSuccessNavigation = { }
         )

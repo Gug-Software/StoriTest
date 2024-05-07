@@ -1,4 +1,4 @@
-package com.jkgug.example.storitest.data
+package com.jkgug.example.storitest.domain
 
 data class BankMovement(
     val idTransaction: String = "",

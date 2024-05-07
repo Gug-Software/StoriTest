@@ -1,6 +1,6 @@
 package com.jkgug.example.storitest.ui.screen.home
 
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 
 data class HomeUiState(
     val loadingContent: Boolean = false,

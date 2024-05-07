@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.components.common.ErrorView
 import com.jkgug.example.storitest.ui.components.common.IndicatorView
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme

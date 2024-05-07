@@ -1,13 +1,13 @@
 package com.jkgug.example.storitest.ui.screen.navhost
 
 import androidx.lifecycle.ViewModel
-import com.jkgug.example.storitest.data.repository.logged.LoggedRepository
+import com.jkgug.example.storitest.usecase.IsUserLoggedUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class NavHostViewModel(
-    private val loggedRepository: LoggedRepository
+    private val isUserLoggedUseCase: IsUserLoggedUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NavHostUiState())
@@ -18,7 +18,7 @@ class NavHostViewModel(
     }
 
     private fun initScreen() {
-        _uiState.value = NavHostUiState(isUserLogged = loggedRepository.isUserLogged())
+        _uiState.value = NavHostUiState(isUserLogged = isUserLoggedUseCase.invoke())
     }
 
 }

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.components.common.EmptyView
 import com.jkgug.example.storitest.ui.components.home.item.BankMovementItem
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme

@@ -1,9 +1,9 @@
-package com.jkgug.example.storitest.data.repository.details
+package com.jkgug.example.storitest.repository.remote.movement
 
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.Flow
 
-interface MovementDetailsRepository {
+interface BankMovementDetailsRepository {
 
     /**
      * get movement details by movement id from firestore

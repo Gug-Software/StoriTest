@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable

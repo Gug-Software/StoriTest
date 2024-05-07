@@ -1,4 +1,4 @@
-package com.jkgug.example.storitest.data.repository.signin
+package com.jkgug.example.storitest.repository.remote.signin
 
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.Flow
@@ -22,10 +22,5 @@ interface SignInRepository {
         firebaseUserId: String
     ): Flow<NetworkResult<Any?>>
 
-    /**
-     * Save user data locally
-     * @param userName user name
-     */
-    suspend fun saveLocallyUserData(userName: String)
 
 }

@@ -3,9 +3,9 @@ package com.jkgug.example.storitest.ui.screen.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jkgug.example.storitest.data.BankMovement
-import com.jkgug.example.storitest.data.repository.details.MovementDetailsRepository
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.navigation.MovementDetails.MOVEMENT_ID_ARG
+import com.jkgug.example.storitest.usecase.GetBankMovementDetailsRemoteUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class MovementDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val movementDetailsRepository: MovementDetailsRepository
+    private val getBankMovementDetailsRemoteUseCase: GetBankMovementDetailsRemoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovementDetailsUiState())
@@ -32,22 +32,23 @@ class MovementDetailsViewModel(
         taskId?.let { movementId ->
             updateStateAsInit()
             viewModelScope.launch {
-                movementDetailsRepository.getMovementDetails(movementId)
+                getBankMovementDetailsRemoteUseCase.invoke(movementId)
                     .collect { networkResult ->
                         when (networkResult) {
                             is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
-                            is NetworkResult.Success -> {
-                                val movementsList = networkResult.data as BankMovement
-                                _uiState.update {
-                                    it.copy(
-                                        bankMovement = movementsList,
-                                        loadingContent = false
-                                    )
-                                }
-                            }
+                            is NetworkResult.Success -> setBankMovementInUi(networkResult)
                         }
                     }
             }
+        }
+    }
+
+    private fun setBankMovementInUi(networkResult: NetworkResult<Any?>) {
+        _uiState.update {
+            it.copy(
+                bankMovement = networkResult.data as BankMovement,
+                loadingContent = false
+            )
         }
     }
 

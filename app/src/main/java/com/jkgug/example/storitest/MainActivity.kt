@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.compose.rememberNavController
-import com.jkgug.example.storitest.ui.components.StoriTestNavHost
+import com.jkgug.example.storitest.ui.screen.navhost.StoriTestNavHost
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 class MainActivity : ComponentActivity() {

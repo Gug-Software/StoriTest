@@ -1,6 +1,7 @@
 package com.jkgug.example.storitest.ui.components.home
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,24 +44,24 @@ fun HomeTop(
         ),
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(paddingXXL),
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.CenterEnd
         ) {
-            Text(
-                text = stringResource(id = R.string.stori),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
-            )
             IconButton(
                 onClick = onLogout,
             ) {
                 Icon(Icons.Filled.ExitToApp, contentDescription = "Localized description")
             }
+            Text(
+                text = stringResource(id = R.string.stori),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
         Spacer(modifier = Modifier.height(paddingM))
         Row(

@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jkgug.example.storitest.data.UserData
-import com.jkgug.example.storitest.data.repository.signup.SignUpRepository
+import com.jkgug.example.storitest.domain.UserData
+import com.jkgug.example.storitest.usecase.CreateUserRemoteWithEmailAndPasswordUseCase
+import com.jkgug.example.storitest.usecase.SaveUserDataRemoteUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
-    private val signUpRepository: SignUpRepository
+    private val createUserRemoteWithEmailAndPasswordUseCase: CreateUserRemoteWithEmailAndPasswordUseCase,
+    private val saveUserDataRemoteUseCase: SaveUserDataRemoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -72,7 +74,7 @@ class SignUpViewModel(
         val userData = getCurrentUserData()
         viewModelScope.launch {
             try {
-                signUpRepository.createUserWithEmailAndPassword(userMail, userPassword)
+                createUserRemoteWithEmailAndPasswordUseCase.invoke(userMail, userPassword)
                     .collect { createResult ->
                         when (createResult) {
                             is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
@@ -88,7 +90,7 @@ class SignUpViewModel(
     private fun getCurrentUserData() = UserData(userName = userName, userLastName = userLastName)
 
     private suspend fun saveUserInFireStore(userData: UserData) {
-        signUpRepository.saveUserData(userData).collect { saveResult ->
+        saveUserDataRemoteUseCase.invoke(userData).collect { saveResult ->
             when (saveResult) {
                 is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
                 is NetworkResult.Success -> _uiState.update { it.copy(navigateToSuccess = true) }

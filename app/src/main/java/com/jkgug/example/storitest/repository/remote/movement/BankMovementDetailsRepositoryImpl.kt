@@ -1,16 +1,16 @@
-package com.jkgug.example.storitest.data.repository.details
+package com.jkgug.example.storitest.repository.remote.movement
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.jkgug.example.storitest.data.BankMovement
+import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.utils.FIRE_STORE_COLLECTION_MOVEMENTS
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class MovementDetailsRepositoryImpl(
+class BankMovementDetailsRepositoryImpl(
     private val firestore: FirebaseFirestore
-) : MovementDetailsRepository {
+) : BankMovementDetailsRepository {
 
     override suspend fun getMovementDetails(
         movementId: String

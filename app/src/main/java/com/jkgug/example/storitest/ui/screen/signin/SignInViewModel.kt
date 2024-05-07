@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jkgug.example.storitest.data.UserData
-import com.jkgug.example.storitest.data.repository.signin.SignInRepository
+import com.jkgug.example.storitest.domain.UserData
+import com.jkgug.example.storitest.usecase.GetUserDataRemoteUseCase
+import com.jkgug.example.storitest.usecase.SaveUserDataLocallyUseCase
+import com.jkgug.example.storitest.usecase.SignInRemoteWithEmailAndPasswordUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
-    private val signInRepository: SignInRepository
+    private val signInRemoteWithEmailAndPasswordUseCase: SignInRemoteWithEmailAndPasswordUseCase,
+    private val getUserDataRemoteUseCase: GetUserDataRemoteUseCase,
+    private val saveUserDataLocallyUseCase: SaveUserDataLocallyUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignInUiState())
@@ -51,7 +55,7 @@ class SignInViewModel(
         _uiState.update { currentState -> currentState.copy(loading = true) }
         viewModelScope.launch {
             try {
-                signInRepository.signInWithEmailAndPassword(userMail, userPassword)
+                signInRemoteWithEmailAndPasswordUseCase.invoke(userMail, userPassword)
                     .collect { networkResult ->
                         when (networkResult) {
                             is NetworkResult.Success -> getUserDataAndSaveLocally(networkResult.data as String)
@@ -69,7 +73,7 @@ class SignInViewModel(
     }
 
     private suspend fun getUserDataAndSaveLocally(firebaseUserId: String) {
-        signInRepository.getUserDataFireStore(firebaseUserId)
+        getUserDataRemoteUseCase.invoke(firebaseUserId)
             .collect { networkResult ->
                 when (networkResult) {
                     is NetworkResult.Success -> saveLocallyUserData(networkResult.data as UserData)
@@ -79,7 +83,7 @@ class SignInViewModel(
     }
 
     private suspend fun saveLocallyUserData(userData: UserData) {
-        signInRepository.saveLocallyUserData(userData.userName)
+        saveUserDataLocallyUseCase.invoke(userData.userName)
         navigateToHome()
     }
 

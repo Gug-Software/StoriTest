@@ -23,7 +23,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 import kotlinx.coroutines.delay
@@ -44,10 +43,12 @@ fun SuccessScreen(
     val sizeSuccessIcon = dimensionResource(id = R.dimen.size_success_icon)
 
     Column(
-        modifier = modifier.padding(
-            start = paddingL, end = paddingL,
-            top = paddingXXXL, bottom = paddingXXXL
-        ),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                start = paddingL, end = paddingL,
+                top = paddingXXXL, bottom = paddingXXXL
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -73,9 +74,7 @@ fun SuccessScreen(
                     Icons.Filled.Check,
                     tint = MaterialTheme.colorScheme.background,
                     contentDescription = "Localized description",
-                    modifier = Modifier.size(
-                        128.dp
-                    )
+                    modifier = Modifier.size(sizeSuccessIcon)
                 )
             }
         }
