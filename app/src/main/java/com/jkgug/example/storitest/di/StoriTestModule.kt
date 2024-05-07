@@ -3,15 +3,19 @@ package com.jkgug.example.storitest.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.SavedStateHandle
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.jkgug.example.storitest.data.repository.details.MovementDetailsRepository
+import com.jkgug.example.storitest.data.repository.details.MovementDetailsRepositoryImpl
 import com.jkgug.example.storitest.data.repository.home.HomeRepository
 import com.jkgug.example.storitest.data.repository.home.HomeRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signin.SignInRepository
 import com.jkgug.example.storitest.data.repository.signin.SignInRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signup.SignUpRepository
 import com.jkgug.example.storitest.data.repository.signup.SingUpRepositoryImpl
+import com.jkgug.example.storitest.ui.screen.details.MovementDetailsViewModel
 import com.jkgug.example.storitest.ui.screen.home.HomeViewModel
 import com.jkgug.example.storitest.ui.screen.signin.SignInViewModel
 import com.jkgug.example.storitest.ui.screen.signup.SignUpViewModel
@@ -48,6 +52,11 @@ class StoriTestModule {
                     sharedPreferences = get()
                 )
             }
+            single<MovementDetailsRepository> {
+                MovementDetailsRepositoryImpl(
+                    firestore = get()
+                )
+            }
 
             // viewmodel
             viewModel {
@@ -58,6 +67,12 @@ class StoriTestModule {
             }
             viewModel {
                 HomeViewModel(homeRepository = get())
+            }
+            viewModel {
+                MovementDetailsViewModel(
+                    savedStateHandle = get(),
+                    movementDetailsRepository = get()
+                )
             }
 
         }

@@ -8,4 +8,6 @@ data class BankMovement(
     val description: String = "",
     val type: String = "",
     val status: Boolean = false
-)
+) {
+    var idFromFireStore: String = ""
+}

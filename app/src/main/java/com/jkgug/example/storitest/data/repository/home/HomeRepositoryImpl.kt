@@ -25,7 +25,9 @@ class HomeRepositoryImpl(
                 if (movements.isEmpty.not()) {
                     val movementsMutableList = mutableListOf<BankMovement>()
                     movements.forEach {
-                        movementsMutableList.add(it.toObject(BankMovement::class.java))
+                        val movement = it.toObject(BankMovement::class.java)
+                        movement.idFromFireStore = it.id
+                        movementsMutableList.add(movement)
                     }
                     trySend(NetworkResult.Success(movementsMutableList))
                 } else {

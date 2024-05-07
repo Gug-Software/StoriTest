@@ -31,6 +31,7 @@ fun HomeTop(
     val paddingXS = dimensionResource(R.dimen.padding_xs)
     val paddingM = dimensionResource(R.dimen.padding_m)
     val paddingL = dimensionResource(R.dimen.padding_l)
+    val paddingXXL = dimensionResource(R.dimen.padding_xxl)
 
     Column(
         modifier = modifier.padding(
@@ -41,7 +42,7 @@ fun HomeTop(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(60.dp),
+                .heightIn(paddingXXL),
             contentAlignment = Alignment.Center,
         ) {
             Text(

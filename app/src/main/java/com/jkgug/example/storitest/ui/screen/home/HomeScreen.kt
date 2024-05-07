@@ -22,8 +22,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
+    modifier: Modifier = Modifier,
+    onMovementClick: (String) -> Unit = {},
 ) {
 
     val paddingL = dimensionResource(R.dimen.padding_l)
@@ -42,10 +43,14 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(paddingL))
         HomeBottom(
             uiState.movements,
+            uiState.messageForUser,
+            isLoading = uiState.loadingContent,
+            { viewModel.getMovementsData() },
+            onMovementClick,
             modifier = Modifier.fillMaxWidth()
         )
-
     }
+
 }
 
 @Preview(showBackground = true)
@@ -55,7 +60,10 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     StoriTestTheme {
         HomeScreen(
-            modifier = Modifier.fillMaxSize()
+            viewModel = koinViewModel(),
+            modifier = Modifier.fillMaxSize(),
+            onMovementClick = { _ ->
+            }
         )
     }
 }

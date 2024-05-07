@@ -24,4 +24,17 @@
     <string name="home_message">Controla tus finanzas fácilmente</string>
     <string name="home_hello">Hola!</string>
 
+    <string name="empty_title">Aún sin movimientos</string>
+    <string name="empty_subtitle">No cuentas con movimientos bancarios, pegale una revisada al firestore :P </string>
+
+    <string name="error_title">Algo ha pasado</string>
+    <string name="error_subtitle">Por favor vuelve a intentarlo</string>
+    <string name="error_retry">Reintentar</string>
+
+    <string name="details_approved">Aprobado</string>
+    <string name="details_cancelled">Cancelado</string>
+    <string name="details_total_amount">Monto total</string>
+    <string name="details_transaction_type">Tipo de transacción</string>
+    <string name="details_transaction_number">No. de transacción</string>
+
 </resources>

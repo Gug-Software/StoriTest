@@ -1,5 +1,8 @@
 package com.jkgug.example.storitest.ui.navigation
 
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+
 interface StoriTestDestination {
     val route: String
 }
@@ -18,4 +21,9 @@ object Home : StoriTestDestination {
 
 object MovementDetails : StoriTestDestination {
     override val route = "movementDetails"
+    const val movementIdArg = "movementIdArg"
+    val routeWithArgs = "${route}/{${movementIdArg}}"
+    val arguments = listOf(
+        navArgument(movementIdArg) { type = NavType.StringType }
+    )
 }

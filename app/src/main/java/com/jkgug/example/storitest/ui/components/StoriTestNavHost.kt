@@ -16,7 +16,7 @@ import com.jkgug.example.storitest.ui.navigation.MovementDetails
 import com.jkgug.example.storitest.ui.navigation.SignIn
 import com.jkgug.example.storitest.ui.navigation.SignUp
 import com.jkgug.example.storitest.ui.screen.home.HomeScreen
-import com.jkgug.example.storitest.ui.screen.MovementDetailsScreen
+import com.jkgug.example.storitest.ui.screen.details.MovementDetailsScreen
 import com.jkgug.example.storitest.ui.screen.signin.SignInScreen
 import com.jkgug.example.storitest.ui.screen.signup.SignUpScreen
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
@@ -67,12 +67,17 @@ fun StoriTestNavHost(
         composable(
             route = Home.route
         ) {
-            HomeScreen()
+            HomeScreen(
+                onMovementClick = { movementId ->
+                    navController.navigateToMovementDetails(movementId)
+                }
+            )
         }
 
         composable(
-            route = MovementDetails.route
-        ) {
+            route = MovementDetails.routeWithArgs,
+            arguments = MovementDetails.arguments,
+        ) { _ ->
             MovementDetailsScreen()
         }
 
@@ -100,4 +105,8 @@ fun NavOptionsBuilder.popUpToTop(navController: NavController) {
     popUpTo(navController.currentBackStackEntry?.destination?.route ?: return) {
         inclusive = true
     }
+}
+
+private fun NavHostController.navigateToMovementDetails(movementId: String) {
+    this.navigateSingleTopTo("${MovementDetails.route}/$movementId")
 }

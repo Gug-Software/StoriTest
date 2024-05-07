@@ -22,8 +22,7 @@ fun BankMovementItem(
     val paddingXS = dimensionResource(R.dimen.padding_xs)
 
     ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
 
         val (leftContent, rightContent) = createRefs()
@@ -46,8 +45,6 @@ fun BankMovementItem(
                     width = Dimension.fillToConstraints
                 }
         )
-
-
     }
 
 }

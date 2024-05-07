@@ -41,9 +41,11 @@ fun SignInContent(
     isLoading: Boolean,
 ) {
 
+    val paddingS = dimensionResource(R.dimen.padding_s)
     val mediumPadding = dimensionResource(R.dimen.padding_m)
     val xlPadding = dimensionResource(R.dimen.padding_xl)
     val cardElevation = dimensionResource(R.dimen.card_elevation)
+    val fieldHeight = dimensionResource(R.dimen.field_height)
 
     Column(
         modifier = modifier,
@@ -68,7 +70,7 @@ fun SignInContent(
             ),
         ) {
             Column(
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(vertical = paddingS),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 MailField(
@@ -91,7 +93,7 @@ fun SignInContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(60.dp),
+                .heightIn(fieldHeight),
             contentAlignment = Alignment.CenterEnd,
         ) {
             if (isLoading) {

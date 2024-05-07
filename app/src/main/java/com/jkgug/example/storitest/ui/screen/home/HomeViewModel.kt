@@ -19,6 +19,7 @@ class HomeViewModel(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
+        _uiState.update { it.copy(loadingContent = true) }
         getUserLocalData()
         getMovementsData()
     }
@@ -30,7 +31,10 @@ class HomeViewModel(
         }
     }
 
-    private fun getMovementsData() {
+    fun getMovementsData() {
+
+        updateStateAsInit()
+
         viewModelScope.launch {
             homeRepository.getMovementsData().collect { networkResult ->
                 when (networkResult) {
@@ -46,6 +50,16 @@ class HomeViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun updateStateAsInit() {
+        _uiState.update {
+            it.copy(
+                movements = listOf(),
+                loadingContent = true,
+                messageForUser = null
+            )
         }
     }
 
