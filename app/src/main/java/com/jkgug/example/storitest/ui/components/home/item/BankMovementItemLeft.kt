@@ -13,15 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.jkgug.example.storitest.R
-import com.jkgug.example.storitest.data.BankMovement
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable
 fun BankMovementItemLeft(
-    modifier: Modifier = Modifier,
-    bankMovement: BankMovement
+    modifier: Modifier = Modifier
 ) {
 
     val paddingS = dimensionResource(R.dimen.padding_s)
@@ -54,17 +51,7 @@ fun BankMovementItemLeft(
 fun BankMovementItemLeftPreview() {
     StoriTestTheme {
         BankMovementItemLeft(
-            modifier = Modifier,
-            bankMovement = BankMovement(
-                idTransaction = "consul",
-                title = "mauris",
-                date = "ad",
-                amount = "ex",
-                description = "torquent",
-                type = "risus",
-                status = false
-            )
-
+            modifier = Modifier
         )
     }
 }

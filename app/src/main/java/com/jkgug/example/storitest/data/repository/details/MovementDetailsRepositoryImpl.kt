@@ -18,9 +18,7 @@ class MovementDetailsRepositoryImpl(
         firestore.collection(FIRE_STORE_COLLECTION_MOVEMENTS).document(movementId).get()
             .addOnSuccessListener { movement ->
                 if (movement.exists()) {
-                    trySend(
-                        NetworkResult.Success(movement.toObject(BankMovement::class.java))
-                    )
+                    trySend(NetworkResult.Success(movement.toObject(BankMovement::class.java)))
                 } else {
                     trySend(NetworkResult.Error(message = "Movement information not found"))
                 }

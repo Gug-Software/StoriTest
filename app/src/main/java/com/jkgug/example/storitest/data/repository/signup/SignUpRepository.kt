@@ -7,14 +7,19 @@ import kotlinx.coroutines.flow.Flow
 interface SignUpRepository {
 
     /**
-     * Register user in firebase with createUserWithEmailAndPassword and update firestore.collection
-     * in firestore
+     * Register user in firebase with createUserWithEmailAndPassword
+     * @param userMail user email
+     * @param userPassword user password
      */
     suspend fun createUserWithEmailAndPassword(
         userMail: String,
         userPassword: String
     ): Flow<NetworkResult<Any?>>
 
+    /**
+     * Save user data to firestore
+     * @param userData user data
+     */
     suspend fun saveUserData(
         userData: UserData
     ): Flow<NetworkResult<Any>>

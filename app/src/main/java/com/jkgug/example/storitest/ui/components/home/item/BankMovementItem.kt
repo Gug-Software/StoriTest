@@ -2,7 +2,6 @@ package com.jkgug.example.storitest.ui.components.home.item
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -27,7 +26,6 @@ fun BankMovementItem(
 
         val (leftContent, rightContent) = createRefs()
         BankMovementItemLeft(
-            bankMovement = bankMovement,
             modifier = Modifier.constrainAs(leftContent) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
@@ -60,7 +58,7 @@ fun BankMovementItem(
     name = "DefaultPreviewDark"
 )
 @Composable
-fun BankMovementItemPreviee() {
+fun BankMovementItemPreview() {
     StoriTestTheme {
         BankMovementItem(
             bankMovement = BankMovement(

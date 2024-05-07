@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jkgug.example.storitest.data.BankMovement
 import com.jkgug.example.storitest.data.repository.details.MovementDetailsRepository
-import com.jkgug.example.storitest.ui.navigation.MovementDetails.movementIdArg
+import com.jkgug.example.storitest.ui.navigation.MovementDetails.MOVEMENT_ID_ARG
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ class MovementDetailsViewModel(
     private val _uiState = MutableStateFlow(MovementDetailsUiState())
     val uiState: StateFlow<MovementDetailsUiState> = _uiState.asStateFlow()
 
-    private val taskId: String? = savedStateHandle[movementIdArg]
+    private val taskId: String? = savedStateHandle[MOVEMENT_ID_ARG]
 
     init {
         _uiState.update { it.copy(loadingContent = true) }
@@ -62,8 +62,8 @@ class MovementDetailsViewModel(
     }
 
     private fun updateMessageErrorForUser(message: String?) {
-        message?.let { message ->
-            _uiState.update { it.copy(messageForUser = message, loadingContent = false) }
+        message?.let { messageUser ->
+            _uiState.update { it.copy(messageForUser = messageUser, loadingContent = false) }
         }
     }
 

@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,37 +20,50 @@ import com.jkgug.example.storitest.ui.components.home.HomeBottom
 import com.jkgug.example.storitest.ui.components.home.HomeFake
 import com.jkgug.example.storitest.ui.components.home.HomeTop
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = koinViewModel(),
     onMovementClick: (String) -> Unit = {},
+    onLogoutNavigation: () -> Unit,
 ) {
 
     val paddingL = dimensionResource(R.dimen.padding_l)
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         HomeTop(
             userName = uiState.userName,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onLogout = { viewModel.logout() }
         )
         Spacer(modifier = Modifier.height(paddingL))
         HomeFake(modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(paddingL))
         HomeBottom(
+            modifier = Modifier.fillMaxWidth(),
             uiState.movements,
             uiState.messageForUser,
             isLoading = uiState.loadingContent,
             { viewModel.getMovementsData() },
             onMovementClick,
-            modifier = Modifier.fillMaxWidth()
         )
+    }
+
+
+    if (uiState.navigateToSignIn) {
+        LaunchedEffect(Unit) {
+            scope.launch {
+                onLogoutNavigation.invoke()
+            }
+        }
     }
 
 }
@@ -60,10 +75,10 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     StoriTestTheme {
         HomeScreen(
-            viewModel = koinViewModel(),
             modifier = Modifier.fillMaxSize(),
-            onMovementClick = { _ ->
-            }
+            viewModel = koinViewModel(),
+            onMovementClick = { _ -> },
+            onLogoutNavigation = { }
         )
     }
 }

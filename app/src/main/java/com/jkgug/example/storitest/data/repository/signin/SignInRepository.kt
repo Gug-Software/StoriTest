@@ -1,6 +1,5 @@
 package com.jkgug.example.storitest.data.repository.signin
 
-import com.jkgug.example.storitest.data.UserData
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.Flow
 
@@ -15,10 +14,18 @@ interface SignInRepository {
         userPassword: String
     ): Flow<NetworkResult<Any?>>
 
+    /**
+     * Get user data from firestore by firebaseUser
+     * @param firebaseUserId user id from firebase
+     */
     suspend fun getUserDataFireStore(
-        firebaseUser: String
+        firebaseUserId: String
     ): Flow<NetworkResult<Any?>>
 
-    suspend fun saveLocallyUserData(userData: UserData)
+    /**
+     * Save user data locally
+     * @param userName user name
+     */
+    suspend fun saveLocallyUserData(userName: String)
 
 }

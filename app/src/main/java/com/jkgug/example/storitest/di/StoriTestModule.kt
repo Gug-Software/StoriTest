@@ -3,7 +3,6 @@ package com.jkgug.example.storitest.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.SavedStateHandle
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
@@ -11,12 +10,15 @@ import com.jkgug.example.storitest.data.repository.details.MovementDetailsReposi
 import com.jkgug.example.storitest.data.repository.details.MovementDetailsRepositoryImpl
 import com.jkgug.example.storitest.data.repository.home.HomeRepository
 import com.jkgug.example.storitest.data.repository.home.HomeRepositoryImpl
+import com.jkgug.example.storitest.data.repository.logged.LoggedRepository
+import com.jkgug.example.storitest.data.repository.logged.LoggedRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signin.SignInRepository
 import com.jkgug.example.storitest.data.repository.signin.SignInRepositoryImpl
 import com.jkgug.example.storitest.data.repository.signup.SignUpRepository
 import com.jkgug.example.storitest.data.repository.signup.SingUpRepositoryImpl
 import com.jkgug.example.storitest.ui.screen.details.MovementDetailsViewModel
 import com.jkgug.example.storitest.ui.screen.home.HomeViewModel
+import com.jkgug.example.storitest.ui.screen.navhost.NavHostViewModel
 import com.jkgug.example.storitest.ui.screen.signin.SignInViewModel
 import com.jkgug.example.storitest.ui.screen.signup.SignUpViewModel
 import com.jkgug.example.storitest.utils.PREFERENCES_FILE_KEY
@@ -57,6 +59,11 @@ class StoriTestModule {
                     firestore = get()
                 )
             }
+            single<LoggedRepository> {
+                LoggedRepositoryImpl(
+                    sharedPreferences = get()
+                )
+            }
 
             // viewmodel
             viewModel {
@@ -72,6 +79,11 @@ class StoriTestModule {
                 MovementDetailsViewModel(
                     savedStateHandle = get(),
                     movementDetailsRepository = get()
+                )
+            }
+            viewModel {
+                NavHostViewModel(
+                    loggedRepository = get()
                 )
             }
 

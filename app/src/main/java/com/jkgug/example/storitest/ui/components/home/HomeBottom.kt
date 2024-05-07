@@ -29,12 +29,12 @@ import com.jkgug.example.storitest.ui.theme.StoriTestTheme
 
 @Composable
 fun HomeBottom(
+    modifier: Modifier = Modifier,
     movements: List<BankMovement> = emptyList(),
     messageForUser: String? = null,
     isLoading: Boolean = false,
     onRetryAction: () -> Unit,
-    onMovementClick: (String) -> Unit = {},
-    modifier: Modifier = Modifier
+    onMovementClick: (String) -> Unit = {}
 ) {
 
     val radiusL = dimensionResource(R.dimen.radius_l)
@@ -62,7 +62,7 @@ fun HomeBottom(
             IndicatorView(modifier = Modifier)
             Spacer(modifier = Modifier.height(paddingM))
             Text(
-                text = stringResource(id = R.string.home_message),
+                text = stringResource(id = R.string.home_title),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.secondary,
             )

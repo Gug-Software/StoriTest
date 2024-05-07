@@ -2,9 +2,11 @@ package com.jkgug.example.storitest.data.repository.home
 
 import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.jkgug.example.storitest.data.BankMovement
 import com.jkgug.example.storitest.utils.FIRE_STORE_COLLECTION_MOVEMENTS
 import com.jkgug.example.storitest.utils.NetworkResult
+import com.jkgug.example.storitest.utils.PREFERENCES_IS_LOGGED
 import com.jkgug.example.storitest.utils.PREFERENCES_USER_NAME
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -24,11 +26,7 @@ class HomeRepositoryImpl(
             .addOnSuccessListener { movements ->
                 if (movements.isEmpty.not()) {
                     val movementsMutableList = mutableListOf<BankMovement>()
-                    movements.forEach {
-                        val movement = it.toObject(BankMovement::class.java)
-                        movement.idFromFireStore = it.id
-                        movementsMutableList.add(movement)
-                    }
+                    movements.forEach { movementsMutableList.add(bankMovement(it)) }
                     trySend(NetworkResult.Success(movementsMutableList))
                 } else {
                     trySend(NetworkResult.Error(message = "Movements information not found"))
@@ -40,6 +38,16 @@ class HomeRepositoryImpl(
                 close()
             }
         awaitClose()
+    }
+
+    override fun logout() {
+        sharedPreferences.edit().putBoolean(PREFERENCES_IS_LOGGED, false).apply()
+    }
+
+    private fun bankMovement(it: QueryDocumentSnapshot): BankMovement {
+        val movement = it.toObject(BankMovement::class.java)
+        movement.idFromFireStore = it.id
+        return movement
     }
 
 }

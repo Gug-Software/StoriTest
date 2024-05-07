@@ -22,10 +22,10 @@ class SignInViewModel(
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
-    var userMail by mutableStateOf("test1@gmail.com")
+    var userMail by mutableStateOf("")
         private set
 
-    var userPassword by mutableStateOf("12345")
+    var userPassword by mutableStateOf("")
         private set
 
     init {
@@ -79,7 +79,7 @@ class SignInViewModel(
     }
 
     private suspend fun saveLocallyUserData(userData: UserData) {
-        signInRepository.saveLocallyUserData(userData)
+        signInRepository.saveLocallyUserData(userData.userName)
         navigateToHome()
     }
 
@@ -99,8 +99,8 @@ class SignInViewModel(
     }
 
     private fun updateMessageErrorForUser(message: String?) {
-        message?.let { message ->
-            _uiState.update { it.copy(messageForUser = message, loading = false) }
+        message?.let { messageUser ->
+            _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
         }
     }
 

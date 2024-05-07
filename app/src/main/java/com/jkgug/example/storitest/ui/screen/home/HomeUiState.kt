@@ -6,5 +6,6 @@ data class HomeUiState(
     val loadingContent: Boolean = false,
     val userName: String = "",
     val messageForUser: String? = null,
-    val movements: List<BankMovement> = listOf()
+    val movements: List<BankMovement> = listOf(),
+    val navigateToSignIn: Boolean = false
 )

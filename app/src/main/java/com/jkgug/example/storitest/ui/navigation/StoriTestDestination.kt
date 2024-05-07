@@ -19,11 +19,15 @@ object Home : StoriTestDestination {
     override val route = "home"
 }
 
+object Success : StoriTestDestination {
+    override val route = "success"
+}
+
 object MovementDetails : StoriTestDestination {
     override val route = "movementDetails"
-    const val movementIdArg = "movementIdArg"
-    val routeWithArgs = "${route}/{${movementIdArg}}"
+    const val MOVEMENT_ID_ARG = "movementIdArg"
+    val routeWithArgs = "${route}/{${MOVEMENT_ID_ARG}}"
     val arguments = listOf(
-        navArgument(movementIdArg) { type = NavType.StringType }
+        navArgument(MOVEMENT_ID_ARG) { type = NavType.StringType }
     )
 }

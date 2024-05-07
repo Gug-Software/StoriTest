@@ -22,16 +22,16 @@ class SignUpViewModel(
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
-    var userName by mutableStateOf("test1")
+    var userName by mutableStateOf("")
         private set
 
-    var userLastName by mutableStateOf("test1")
+    var userLastName by mutableStateOf("")
         private set
 
-    var userMail by mutableStateOf("test1@gmail.com")
+    var userMail by mutableStateOf("")
         private set
 
-    var userPassword by mutableStateOf("1234")
+    var userPassword by mutableStateOf("")
         private set
 
     init {
@@ -91,14 +91,14 @@ class SignUpViewModel(
         signUpRepository.saveUserData(userData).collect { saveResult ->
             when (saveResult) {
                 is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
-                is NetworkResult.Success -> _uiState.update { it.copy(navigateToHome = true) }
+                is NetworkResult.Success -> _uiState.update { it.copy(navigateToSuccess = true) }
             }
         }
     }
 
     private fun updateMessageErrorForUser(message: String?) {
-        message?.let { message ->
-            _uiState.update { it.copy(messageForUser = message, loading = false) }
+        message?.let { messageUser ->
+            _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
         }
     }
 

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">StoriTest</string>
+    <string name="stori">STORI</string>
 
     <string name="sigin_title">Iniciar sesión</string>
     <string name="sigin_description">Por favor inicia sesión para continuar</string>
@@ -12,7 +13,7 @@
     <string name="signup_title">Crear cuenta</string>
     <string name="signup_account">¿Ya tienes una cuenta?</string>
     <string name="signup_button">Registrarse</string>
-    <string name="signup_signin">Ingresar</string>
+    <string name="signup_sign_in">Ingresar</string>
 
     <string name="user_field_name_hint">Nombres</string>
     <string name="user_field_lastname_hint">Apellidos</string>
@@ -36,5 +37,8 @@
     <string name="details_total_amount">Monto total</string>
     <string name="details_transaction_type">Tipo de transacción</string>
     <string name="details_transaction_number">No. de transacción</string>
+
+    <string name="success_title">Felicitaciones</string>
+    <string name="success_message">Tu cuenta ha sido creada exitosamente</string>
 
 </resources>

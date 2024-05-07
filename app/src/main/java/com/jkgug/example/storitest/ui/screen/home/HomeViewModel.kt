@@ -31,6 +31,7 @@ class HomeViewModel(
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun getMovementsData() {
 
         updateStateAsInit()
@@ -64,9 +65,14 @@ class HomeViewModel(
     }
 
     private fun updateMessageErrorForUser(message: String?) {
-        message?.let { message ->
-            _uiState.update { it.copy(messageForUser = message, loadingContent = false) }
+        message?.let { messageUser ->
+            _uiState.update { it.copy(messageForUser = messageUser, loadingContent = false) }
         }
+    }
+
+    fun logout() {
+        homeRepository.logout()
+        _uiState.update { it.copy(navigateToSignIn = true) }
     }
 
 }

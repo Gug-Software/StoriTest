@@ -43,7 +43,7 @@ fun SignUpBottomContent(
             enabled = isLoading.not()
         ) {
             Text(
-                text = stringResource(R.string.signup_signin),
+                text = stringResource(R.string.signup_sign_in),
                 style = MaterialTheme.typography.titleSmall
             )
         }

@@ -23,8 +23,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovementDetailsScreen(
+    modifier: Modifier = Modifier,
     viewModel: MovementDetailsViewModel = koinViewModel(),
-    modifier: Modifier = Modifier
+    onBackNavigation: () -> Unit,
 ) {
 
     val paddingXL = dimensionResource(R.dimen.padding_xl)
@@ -34,7 +35,10 @@ fun MovementDetailsScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        DetailsButtons(modifier = Modifier.padding(paddingM))
+        DetailsButtons(
+            onBackNavigation = onBackNavigation,
+            modifier = Modifier.padding(paddingM)
+        )
         if (uiState.loadingContent) {
             LinearProgressIndicator(
                 modifier = Modifier
@@ -72,8 +76,9 @@ fun MovementDetailsScreen(
 fun HomeTopPreview() {
     StoriTestTheme {
         MovementDetailsScreen(
+            modifier = Modifier.fillMaxWidth(),
             viewModel = koinViewModel(),
-            modifier = Modifier.fillMaxWidth()
+            onBackNavigation = { }
         )
     }
 }

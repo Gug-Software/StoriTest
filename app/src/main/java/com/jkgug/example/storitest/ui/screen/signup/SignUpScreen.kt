@@ -3,14 +3,11 @@ package com.jkgug.example.storitest.ui.screen.signup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -25,7 +22,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
-    onHomeNavigation: () -> Unit,
+    onBackNavigation: () -> Unit,
+    onSuccessNavigation: () -> Unit,
     viewModel: SignUpViewModel = koinViewModel(),
     snackBarHostState: SnackbarHostState,
 ) {
@@ -62,7 +60,7 @@ fun SignUpScreen(
                 }
         )
         SignUpBottomContent(
-            onSignInClick = {},
+            onSignInClick = onBackNavigation,
             isLoading = uiState.loading,
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,10 +71,10 @@ fun SignUpScreen(
         )
     }
 
-    if (uiState.navigateToHome) {
+    if (uiState.navigateToSuccess) {
         LaunchedEffect(Unit) {
             scope.launch {
-                onHomeNavigation.invoke()
+                onSuccessNavigation.invoke()
             }
         }
     }
@@ -96,9 +94,10 @@ fun SignUpScreen(
 fun SignUpContentPreview() {
     StoriTestTheme {
         SignUpScreen(
-            onHomeNavigation = {},
+            onBackNavigation = {},
             viewModel = SignUpViewModel(koinViewModel()),
-            snackBarHostState = SnackbarHostState()
+            snackBarHostState = SnackbarHostState(),
+            onSuccessNavigation = { }
         )
     }
 }

@@ -3,9 +3,8 @@ package com.jkgug.example.storitest.data.repository.signup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jkgug.example.storitest.data.UserData
+import com.jkgug.example.storitest.utils.FIRE_STORE_COLLECTION_USERS
 import com.jkgug.example.storitest.utils.NetworkResult
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -36,7 +35,7 @@ class SingUpRepositoryImpl(
     override suspend fun saveUserData(
         userData: UserData
     ): Flow<NetworkResult<Any>> = callbackFlow {
-        val userRef = firestore.collection("users").document(
+        val userRef = firestore.collection(FIRE_STORE_COLLECTION_USERS).document(
             firebaseAuth.currentUser?.uid.orEmpty()
         )
         userRef.set(userData)

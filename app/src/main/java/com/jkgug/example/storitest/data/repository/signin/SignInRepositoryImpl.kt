@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.jkgug.example.storitest.data.UserData
 import com.jkgug.example.storitest.utils.FIRE_STORE_COLLECTION_USERS
 import com.jkgug.example.storitest.utils.NetworkResult
+import com.jkgug.example.storitest.utils.PREFERENCES_IS_LOGGED
 import com.jkgug.example.storitest.utils.PREFERENCES_USER_NAME
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -36,10 +37,10 @@ class SignInRepositoryImpl(
         }
 
     override suspend fun getUserDataFireStore(
-        firebaseUser: String
+        firebaseUserId: String
     ): Flow<NetworkResult<Any?>> = callbackFlow {
         firestore.collection(FIRE_STORE_COLLECTION_USERS).document(
-            firebaseUser
+            firebaseUserId
         ).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -57,9 +58,9 @@ class SignInRepositoryImpl(
         awaitClose()
     }
 
-    override suspend fun saveLocallyUserData(userData: UserData) {
-        sharedPreferences.edit().putString(PREFERENCES_USER_NAME, userData.userName).apply()
+    override suspend fun saveLocallyUserData(userName: String) {
+        sharedPreferences.edit().putString(PREFERENCES_USER_NAME, userName).apply()
+        sharedPreferences.edit().putBoolean(PREFERENCES_IS_LOGGED, true).apply()
     }
-
 
 }

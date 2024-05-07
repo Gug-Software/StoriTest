@@ -10,6 +10,7 @@
     <dimen name="padding_l">24dp</dimen>
     <dimen name="padding_xl">32dp</dimen>
     <dimen name="padding_xxl">48dp</dimen>
+    <dimen name="padding_xxxl">96dp</dimen>
 
     <dimen name="tonal_elevation">1dp</dimen>
 
@@ -19,6 +20,7 @@
     <dimen name="radius_xxl">48dp</dimen>
 
     <dimen name="size_image_item_movement">64dp</dimen>
+    <dimen name="size_success_icon">128dp</dimen>
 
     <dimen name="field_height">60dp</dimen>
 

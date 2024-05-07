@@ -24,8 +24,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
-    onSignInNavigation: () -> Unit,
-    onHomeNavigation: () -> Unit,
+    onSignUpNavigation: () -> Unit,
+    onNavigateToHome: () -> Unit,
     viewModel: SignInViewModel = koinViewModel(),
     snackBarHostState: SnackbarHostState
 ) {
@@ -58,7 +58,7 @@ fun SignInScreen(
                 }
         )
         SignInBottomContent(
-            onSignInClick = onSignInNavigation,
+            onSignInClick = onSignUpNavigation,
             isLoading = uiState.loading,
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +72,7 @@ fun SignInScreen(
     if (uiState.navigateToHome) {
         LaunchedEffect(Unit) {
             scope.launch {
-                onHomeNavigation.invoke()
+                onNavigateToHome.invoke()
             }
         }
     }
@@ -94,8 +94,8 @@ fun SignInScreen(
 fun SignInScreenPreview() {
     StoriTestTheme {
         SignInScreen(
-            onSignInNavigation = { },
-            onHomeNavigation = { },
+            onSignUpNavigation = { },
+            onNavigateToHome = { },
             viewModel = SignInViewModel(koinViewModel()),
             snackBarHostState = SnackbarHostState()
         )
