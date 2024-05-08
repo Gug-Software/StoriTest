@@ -14,6 +14,7 @@ import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -54,17 +55,14 @@ class SignInViewModel(
     fun checkSignIn() {
         _uiState.update { currentState -> currentState.copy(loading = true) }
         viewModelScope.launch {
-            try {
-                signInRemoteWithEmailAndPasswordUseCase.invoke(userMail, userPassword)
-                    .collect { networkResult ->
-                        when (networkResult) {
-                            is NetworkResult.Success -> getUserDataAndSaveLocally(networkResult.data as String)
-                            is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
-                        }
+            signInRemoteWithEmailAndPasswordUseCase(userMail, userPassword)
+                .catch { updateMessageErrorForUser(it.message) }
+                .collect { networkResult ->
+                    when (networkResult) {
+                        is NetworkResult.Success -> getUserDataAndSaveLocally(networkResult.data as String)
+                        is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
                     }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(messageForUser = e.message) }
-            }
+                }
         }
     }
 
@@ -73,7 +71,7 @@ class SignInViewModel(
     }
 
     private suspend fun getUserDataAndSaveLocally(firebaseUserId: String) {
-        getUserDataRemoteUseCase.invoke(firebaseUserId)
+        getUserDataRemoteUseCase(firebaseUserId)
             .collect { networkResult ->
                 when (networkResult) {
                     is NetworkResult.Success -> saveLocallyUserData(networkResult.data as UserData)
@@ -83,7 +81,7 @@ class SignInViewModel(
     }
 
     private suspend fun saveLocallyUserData(userData: UserData) {
-        saveUserDataLocallyUseCase.invoke(userData.userName)
+        saveUserDataLocallyUseCase(userData.userName)
         navigateToHome()
     }
 

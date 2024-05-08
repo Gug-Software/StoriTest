@@ -25,7 +25,7 @@ class GetUserNameLocallyUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenUserIsLogged_returnsTrue()`() {
+    fun invoke_whenUserIsLogged_returnsUserName() {
         runTest {
             // Arrange
             Mockito.`when`(userDataRepository.getLocallyUserName()).thenReturn(name)
@@ -39,7 +39,7 @@ class GetUserNameLocallyUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenUserIsLogged_returnsFalse()`() {
+    fun invoke_whenUserIsLogged_returnsEmpty() {
         runTest {
             // Arrange
             Mockito.`when`(userDataRepository.getLocallyUserName()).thenReturn("")

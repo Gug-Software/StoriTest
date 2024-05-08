@@ -22,7 +22,7 @@ class LogOutUserUseCaseImplTest {
     }
 
     @Test
-    fun whenUseCaseInvokeCallRepositorySaveIsLogged() {
+    fun invokeLogOutUser_usesRepositorySaveIsLogged() {
         // Arrange
         doNothing().`when`(sessionRepository).saveIsLogged(false)
 

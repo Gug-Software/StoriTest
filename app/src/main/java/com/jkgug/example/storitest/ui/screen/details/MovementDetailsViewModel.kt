@@ -14,14 +14,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MovementDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val getBankMovementDetailsRemoteUseCase: GetBankMovementDetailsRemoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovementDetailsUiState())
     val uiState: StateFlow<MovementDetailsUiState> = _uiState.asStateFlow()
-
-    private val taskId: String? = savedStateHandle[MOVEMENT_ID_ARG]
 
     init {
         _uiState.update { it.copy(loadingContent = true) }
@@ -29,10 +27,11 @@ class MovementDetailsViewModel(
     }
 
     fun getMovementsData() {
+        val taskId = savedStateHandle.get<String>(MOVEMENT_ID_ARG)
         taskId?.let { movementId ->
             updateStateAsInit()
             viewModelScope.launch {
-                getBankMovementDetailsRemoteUseCase.invoke(movementId)
+                getBankMovementDetailsRemoteUseCase(movementId)
                     .collect { networkResult ->
                         when (networkResult) {
                             is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)

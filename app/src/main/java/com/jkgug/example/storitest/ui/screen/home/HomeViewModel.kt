@@ -33,7 +33,7 @@ class HomeViewModel(
         updateStateAsInit()
 
         viewModelScope.launch {
-            getBankMovementsRemoteUseCase.invoke().collect { networkResult ->
+            getBankMovementsRemoteUseCase().collect { networkResult ->
                 when (networkResult) {
                     is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
                     is NetworkResult.Success -> setMovementsListInUiState(networkResult)
@@ -43,14 +43,14 @@ class HomeViewModel(
     }
 
     fun logout() {
-        viewModelScope.launch { logOutUserUseCase.invoke() }
+        viewModelScope.launch { logOutUserUseCase() }
         _uiState.update { it.copy(navigateToSignIn = true) }
     }
 
     private fun getUserLocalData() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(userName = getUserNameLocallyUseCase.invoke())
+                it.copy(userName = getUserNameLocallyUseCase())
             }
         }
     }

@@ -30,7 +30,7 @@ class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess()`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_usesRepository() = runTest {
         // GIVEN
         `when`(signInRepository.signInWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Success(firebaseUserId) }
@@ -44,7 +44,7 @@ class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError()`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordError_usesRepository() = runTest {
         // GIVEN
         `when`(signInRepository.signInWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }
@@ -58,7 +58,7 @@ class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess2`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_retrurnsSuccessFlow() = runTest {
         // GIVEN
         `when`(signInRepository.signInWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Success(firebaseUserId) }
@@ -75,7 +75,7 @@ class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError2`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordError_returnsErrorFlow() = runTest {
         // GIVEN
         `when`(signInRepository.signInWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }

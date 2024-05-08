@@ -4,7 +4,6 @@ import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.repository.remote.movement.BankMovementDetailsRepository
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +29,7 @@ class GetBankMovementDetailsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invokeGetMovementDetails_returnsSuccess`() = runTest {
+    fun invokeGetMovementDetails_returnsSuccess_useRepository() = runTest {
         // GIVEN
         Mockito.`when`(bankMovementDetailsRepository.getMovementDetails(movementId)).thenReturn(
             flow { NetworkResult.Success(bankMovement) }
@@ -43,7 +42,7 @@ class GetBankMovementDetailsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invokeGetMovementDetails_returnsError`() = runTest {
+    fun invokeGetMovementDetails_returnsError_useRepository() = runTest {
         // GIVEN
         Mockito.`when`(bankMovementDetailsRepository.getMovementDetails(movementId)).thenReturn(
             flow { NetworkResult.Error(message = "User not found", data = null) }
@@ -56,7 +55,7 @@ class GetBankMovementDetailsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `flow emits successfully SUCCESS`(): Unit = runBlocking {
+    fun invokeGetMovementDetails_returnsSuccess_flow(): Unit = runTest {
         // GIVEN
         Mockito.`when`(bankMovementDetailsRepository.getMovementDetails(movementId)).thenReturn(
             flow { NetworkResult.Success(bankMovement) }
@@ -72,7 +71,7 @@ class GetBankMovementDetailsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `flow emits successfully ERROR`(): Unit = runBlocking {
+    fun invokeGetMovementDetails_returnsError_flow(): Unit = runTest {
         // GIVEN
         Mockito.`when`(bankMovementDetailsRepository.getMovementDetails(movementId)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }

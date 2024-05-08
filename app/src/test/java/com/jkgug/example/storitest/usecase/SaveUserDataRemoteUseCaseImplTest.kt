@@ -33,7 +33,7 @@ class SaveUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess()`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_usesSignUpRepository() = runTest {
 
         // GIVEN
         `when`(signUpRepository.saveUserData(userData)).thenReturn(
@@ -48,7 +48,7 @@ class SaveUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError()`() = runTest {
+    fun invoke_whenSignInWithEmailAndPassword_usesSignUpRepositoryAndReturnsError() = runTest {
         // GIVEN
         `when`(signUpRepository.saveUserData(userData)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }
@@ -62,7 +62,7 @@ class SaveUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess2`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_returnSuccessFlow() = runTest {
         // GIVEN
         `when`(signUpRepository.saveUserData(userData)).thenReturn(
             flow { NetworkResult.Success(userDataId) }
@@ -79,7 +79,7 @@ class SaveUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError2`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordError_returnErrorFlow() = runTest {
         // GIVEN
         `when`(signUpRepository.saveUserData(userData)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }

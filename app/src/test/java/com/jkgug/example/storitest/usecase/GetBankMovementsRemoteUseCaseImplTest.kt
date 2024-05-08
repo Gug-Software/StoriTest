@@ -3,7 +3,6 @@ package com.jkgug.example.storitest.usecase
 import com.jkgug.example.storitest.repository.remote.movement.BankMovementsRepository
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +29,7 @@ class GetBankMovementsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess()`() = runTest {
+    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_usesRepository()`() = runTest {
 
         // GIVEN
         `when`(bankMovementsRepository.getMovementsData()).thenReturn(
@@ -45,7 +44,7 @@ class GetBankMovementsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError()`() = runTest {
+    fun invoke_whenSignInWithEmailAndPasswordFails_usesRepository() = runTest {
 
         // GIVEN
         `when`(bankMovementsRepository.getMovementsData()).thenReturn(
@@ -60,7 +59,7 @@ class GetBankMovementsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `flow emits successfully SUCCESS`(): Unit = runBlocking {
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccessFlow(): Unit = runTest {
 
         // GIVEN
         `when`(bankMovementsRepository.getMovementsData()).thenReturn(
@@ -77,25 +76,7 @@ class GetBankMovementsRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `flow emits successfully SUCCESS empty list`(): Unit = runBlocking {
-
-        // GIVEN
-        `when`(bankMovementsRepository.getMovementsData()).thenReturn(
-            flow { NetworkResult.Success(bankMovementList) }
-        )
-
-        // WHEN
-        val flow = useCase()
-
-        // THEN
-        flow.collect { result ->
-            assert(result is NetworkResult.Success)
-            assert(result.data == bankMovementList)
-        }
-    }
-
-    @Test
-    fun `flow emits successfully ERROR`(): Unit = runBlocking {
+    fun invoke_whenSignInWithEmailAndPasswordError_returnsErrorFlow(): Unit = runTest {
 
         // GIVEN
         `when`(bankMovementsRepository.getMovementsData()).thenReturn(

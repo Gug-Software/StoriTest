@@ -27,7 +27,7 @@ class SaveUserDataLocallyUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_savesUserDataAndUpdatesLoginStatus()`() = runTest {
+    fun invokeUseCase_useUserDataRepositoryAndSessionRepository() = runTest {
         // Arrange
         val userName = "test_user"
 

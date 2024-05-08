@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.jkgug.example.storitest.repository.remote.signup.SignUpRepository
 import com.jkgug.example.storitest.utils.NetworkResult
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -33,8 +32,7 @@ class CreateUserRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess()`() = runTest {
-
+    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess_useRepository()`() = runTest {
         // GIVEN
         Mockito.`when`(signUpRepository.createUserWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Success(firebaseUser) }
@@ -48,8 +46,7 @@ class CreateUserRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError()`() = runTest {
-
+    fun invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError_useRepository() = runTest {
         // GIVEN
         Mockito.`when`(signUpRepository.createUserWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }
@@ -63,8 +60,7 @@ class CreateUserRemoteWithEmailAndPasswordUseCaseImplTest {
     }
 
     @Test
-    fun `flow emits successfully SUCCESS`(): Unit = runBlocking {
-
+    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_flow is success`(): Unit = runTest {
         // GIVEN
         Mockito.`when`(signUpRepository.createUserWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Success(firebaseUser) }
@@ -77,12 +73,10 @@ class CreateUserRemoteWithEmailAndPasswordUseCaseImplTest {
             assert(result is NetworkResult.Success)
             assert(result.data == firebaseUser)
         }
-
     }
 
     @Test
-    fun `flow emits successfully ERROR`(): Unit = runBlocking {
-
+    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_flow is error`(): Unit = runTest {
         // GIVEN
         Mockito.`when`(signUpRepository.createUserWithEmailAndPassword(email, password)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }

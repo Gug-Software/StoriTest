@@ -23,7 +23,7 @@ class IsUserLoggedUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenUserIsLogged_returnsTrue()`() {
+    fun invoke_whenUserIsLogged_returnsTrue() {
         // Arrange
         `when`(sessionRepository.isUserLogged()).thenReturn(true)
 
@@ -35,7 +35,7 @@ class IsUserLoggedUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenUserIsLogged_returnsFalse()`() {
+    fun invoke_whenUserIsNotLogged_returnsFalse() {
         // Arrange
         `when`(sessionRepository.isUserLogged()).thenReturn(false)
 

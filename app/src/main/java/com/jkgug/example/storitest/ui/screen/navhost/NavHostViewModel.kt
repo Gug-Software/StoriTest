@@ -18,7 +18,7 @@ class NavHostViewModel(
     }
 
     private fun initScreen() {
-        _uiState.value = NavHostUiState(isUserLogged = isUserLoggedUseCase.invoke())
+        _uiState.value = NavHostUiState(isUserLogged = isUserLoggedUseCase())
     }
 
 }

@@ -29,7 +29,7 @@ class GetUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_getUserDataFireStore_returnsSuccess()`() = runTest {
+    fun invoke_getUserDataFireStore_returnsSuccess() = runTest {
         // GIVEN
         Mockito.`when`(signInRepository.getUserDataFireStore(firebaseUserId)).thenReturn(
             flow { NetworkResult.Success(userData) }
@@ -43,7 +43,7 @@ class GetUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_getUserDataFireStore_returnsError()`() = runTest {
+    fun invoke_getUserDataFireStore_returnsError() = runTest {
         // GIVEN
         Mockito.`when`(signInRepository.getUserDataFireStore(firebaseUserId)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }
@@ -57,7 +57,7 @@ class GetUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsSuccess()`() = runTest {
+    fun invoke_getUserDataFireStore_returnsSuccess_returnSuccessFlow() = runTest {
         // GIVEN
         Mockito.`when`(signInRepository.getUserDataFireStore(firebaseUserId)).thenReturn(
             flow { NetworkResult.Success(userData) }
@@ -74,7 +74,7 @@ class GetUserDataRemoteUseCaseImplTest {
     }
 
     @Test
-    fun `invoke_whenSignInWithEmailAndPasswordSucceeds_returnsError()`() = runTest {
+    fun invoke_getUserDataFireStore_returnsError_returnErrorFlow() = runTest {
         // GIVEN
         Mockito.`when`(signInRepository.getUserDataFireStore(firebaseUserId)).thenReturn(
             flow { NetworkResult.Error(message = messageError, data = null) }
