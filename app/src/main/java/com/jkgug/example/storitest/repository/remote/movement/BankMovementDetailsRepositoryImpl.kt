@@ -12,7 +12,7 @@ class BankMovementDetailsRepositoryImpl(
     private val firestore: FirebaseFirestore
 ) : BankMovementDetailsRepository {
 
-    override suspend fun getMovementDetails(
+    override fun getMovementDetails(
         movementId: String
     ): Flow<NetworkResult<Any?>> = callbackFlow {
         firestore.collection(FIRE_STORE_COLLECTION_MOVEMENTS).document(movementId).get()

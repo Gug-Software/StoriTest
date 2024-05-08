@@ -5,7 +5,7 @@ interface SessionRepository {
     /**
      * get the session state
      */
-    suspend fun saveIsLogged(isLogged: Boolean)
+    fun saveIsLogged(isLogged: Boolean)
 
     /**
      * Verify if the user is logged

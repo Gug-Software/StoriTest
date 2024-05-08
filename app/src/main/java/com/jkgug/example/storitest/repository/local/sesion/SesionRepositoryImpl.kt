@@ -6,7 +6,8 @@ import com.jkgug.example.storitest.utils.PREFERENCES_IS_LOGGED
 class SessionRepositoryImpl(
     private val sharedPreferences: SharedPreferences
 ) : SessionRepository {
-    override suspend fun saveIsLogged(isLogged: Boolean) {
+
+    override fun saveIsLogged(isLogged: Boolean) {
         sharedPreferences.edit().putBoolean(PREFERENCES_IS_LOGGED, isLogged).apply()
     }
 

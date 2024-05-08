@@ -13,6 +13,7 @@ import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -73,27 +74,30 @@ class SignUpViewModel(
         _uiState.update { currentState -> currentState.copy(loading = true) }
         val userData = getCurrentUserData()
         viewModelScope.launch {
-            try {
-                createUserRemoteWithEmailAndPasswordUseCase.invoke(userMail, userPassword)
-                    .collect { createResult ->
-                        when (createResult) {
-                            is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
-                            is NetworkResult.Success -> saveUserInFireStore(userData)
-                        }
+            createUserRemoteWithEmailAndPasswordUseCase(userMail, userPassword)
+                .catch { throwable ->
+                    updateMessageErrorForUser(throwable.message)
+                }
+                .collect { createResult ->
+                    when (createResult) {
+                        is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
+                        is NetworkResult.Success -> saveUserInFireStore(userData)
                     }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(messageForUser = e.message) }
-            }
+                }
         }
     }
 
     private fun getCurrentUserData() = UserData(userName = userName, userLastName = userLastName)
 
-    private suspend fun saveUserInFireStore(userData: UserData) {
-        saveUserDataRemoteUseCase.invoke(userData).collect { saveResult ->
-            when (saveResult) {
-                is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
-                is NetworkResult.Success -> _uiState.update { it.copy(navigateToSuccess = true) }
+    private fun saveUserInFireStore(userData: UserData) {
+        viewModelScope.launch {
+            saveUserDataRemoteUseCase(userData).catch { throwable ->
+                updateMessageErrorForUser(throwable.message)
+            }.collect { saveResult ->
+                when (saveResult) {
+                    is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
+                    is NetworkResult.Success -> _uiState.update { it.copy(navigateToSuccess = true) }
+                }
             }
         }
     }

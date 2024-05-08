@@ -16,13 +16,9 @@ class BankMovementsRepositoryImpl(
     override suspend fun getMovementsData(): Flow<NetworkResult<Any?>> = callbackFlow {
         firestore.collection(FIRE_STORE_COLLECTION_MOVEMENTS).get()
             .addOnSuccessListener { movements ->
-                if (movements.isEmpty.not()) {
-                    val movementsMutableList = mutableListOf<BankMovement>()
-                    movements.forEach { movementsMutableList.add(bankMovement(it)) }
-                    trySend(NetworkResult.Success(movementsMutableList))
-                } else {
-                    trySend(NetworkResult.Error(message = "Movements information not found"))
-                }
+                val movementsMutableList = mutableListOf<BankMovement>()
+                movements.forEach { movementsMutableList.add(bankMovement(it)) }
+                trySend(NetworkResult.Success(movementsMutableList))
                 close()
             }
             .addOnFailureListener {

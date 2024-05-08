@@ -9,7 +9,7 @@ interface BankMovementDetailsRepository {
      * get movement details by movement id from firestore
      * @param movementId: the id of the movement
      */
-    suspend fun getMovementDetails(
+    fun getMovementDetails(
         movementId: String
     ): Flow<NetworkResult<Any?>>
 

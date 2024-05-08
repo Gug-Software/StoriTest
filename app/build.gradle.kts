@@ -71,8 +71,10 @@ dependencies {
     implementation(libs.koin.android)
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.junit.ktx)
 
     testImplementation(libs.junit)
+    testImplementation("junit:junit:4.12")
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,5 +83,9 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    testImplementation("org.mockito:mockito-core:5.2.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
 
 }
