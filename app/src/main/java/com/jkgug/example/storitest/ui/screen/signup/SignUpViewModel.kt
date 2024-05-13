@@ -1,5 +1,7 @@
 package com.jkgug.example.storitest.ui.screen.signup
 
+import android.util.Patterns
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.jkgug.example.storitest.domain.UserData
 import com.jkgug.example.storitest.usecase.SignUpUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
-import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +36,15 @@ class SignUpViewModel(
     var userPassword by mutableStateOf("")
         private set
 
+    val emailHasErrors by derivedStateOf {
+        if (userMail.isNotEmpty()) {
+            // Email is considered erroneous until it completely matches EMAIL_ADDRESS.
+            Patterns.EMAIL_ADDRESS.matcher(userMail).matches()
+        } else {
+            false
+        }
+    }
+
     init {
         initScreen()
     }
@@ -55,7 +65,6 @@ class SignUpViewModel(
 
     fun updateUserMail(userMail: String) {
         this.userMail = userMail
-        checkUserMail()
         checkEnabledSignInButton()
     }
 
@@ -92,8 +101,6 @@ class SignUpViewModel(
     private fun updateMessageErrorForUser(message: String?) = message?.let { messageUser ->
         _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
     }
-
-    private fun checkUserMail() = _uiState.update { it.copy(isValidEmail = isValidEmail(userMail)) }
 
     private fun checkEnabledSignInButton() {
         val enabledButton = userMail.isNotEmpty()

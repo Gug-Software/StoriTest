@@ -44,7 +44,7 @@ fun SignInScreen(
         SignInContent(
             onUserMailChanged = { viewModel.updateUserMail(it) },
             userMailValue = viewModel.userMail,
-            isValidaMail = uiState.isValidEmail,
+            isValidaMail = viewModel.emailHasErrors,
             onUserPasswordChanged = { viewModel.updateUserPassword(it) },
             userPasswordValue = viewModel.userPassword,
             enabledSignInButton = uiState.enabledSignInButton,
