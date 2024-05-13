@@ -17,13 +17,14 @@ import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.components.signup.SignUpBottomContent
 import com.jkgug.example.storitest.ui.components.signup.SignUpContent
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnNavigate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
-    onBackNavigation: () -> Unit,
-    onSuccessNavigation: () -> Unit,
+    onBackNavigation: OnNavigate,
+    onSuccessNavigation: OnNavigate,
     viewModel: SignUpViewModel = koinViewModel(),
     snackBarHostState: SnackbarHostState,
 ) {
@@ -49,7 +50,7 @@ fun SignUpScreen(
             userPasswordValue = viewModel.userPassword,
             isValidaMail = uiState.isValidEmail,
             enabledSignInButton = uiState.enabledSignInButton,
-            onCheckSignUp = { viewModel.checkSignUp() },
+            onCheckSignUp = { viewModel.signUp() },
             isLoading = uiState.loading,
             modifier = Modifier
                 .fillMaxWidth()

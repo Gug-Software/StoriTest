@@ -1,9 +1,8 @@
 package com.jkgug.example.storitest.ui.screen.signin
 
 import com.jkgug.example.storitest.MainCoroutineRule
-import com.jkgug.example.storitest.usecase.GetUserDataRemoteUseCase
 import com.jkgug.example.storitest.usecase.SaveUserDataLocallyUseCase
-import com.jkgug.example.storitest.usecase.SignInRemoteWithEmailAndPasswordUseCase
+import com.jkgug.example.storitest.usecase.SignInUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -19,10 +18,8 @@ import org.mockito.MockitoAnnotations
 class SignInViewModelTest {
 
     @Mock
-    private lateinit var signInUseCase: SignInRemoteWithEmailAndPasswordUseCase
+    private lateinit var signInUseCase: SignInUseCase
 
-    @Mock
-    private lateinit var getUserUseCase: GetUserDataRemoteUseCase
 
     @Mock
     private lateinit var saveUserUseCase: SaveUserDataLocallyUseCase
@@ -38,7 +35,7 @@ class SignInViewModelTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined) // Set the Main dispatcher for tests
         MockitoAnnotations.openMocks(this)
-        viewModel = SignInViewModel(signInUseCase, getUserUseCase, saveUserUseCase)
+        viewModel = SignInViewModel(signInUseCase, saveUserUseCase)
     }
 
     @Test
@@ -57,7 +54,7 @@ class SignInViewModelTest {
 
         assert(viewModel.uiState.value.loading)
 
-        viewModel.checkSignIn()
+        viewModel.signIn()
 
         //verify(signInUseCase).invoke(mail, password)
     }

@@ -6,9 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jkgug.example.storitest.domain.UserData
-import com.jkgug.example.storitest.usecase.GetUserDataRemoteUseCase
 import com.jkgug.example.storitest.usecase.SaveUserDataLocallyUseCase
-import com.jkgug.example.storitest.usecase.SignInRemoteWithEmailAndPasswordUseCase
+import com.jkgug.example.storitest.usecase.SignInUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
-    private val signInRemoteWithEmailAndPasswordUseCase: SignInRemoteWithEmailAndPasswordUseCase,
-    private val getUserDataRemoteUseCase: GetUserDataRemoteUseCase,
+    private val signInRemoteWithEmailAndPasswordUseCase: SignInUseCase,
     private val saveUserDataLocallyUseCase: SaveUserDataLocallyUseCase
 ) : ViewModel() {
 
@@ -52,42 +50,28 @@ class SignInViewModel(
         checkEnabledSignInButton()
     }
 
-    fun checkSignIn() {
+    fun signIn() {
         _uiState.update { currentState -> currentState.copy(loading = true) }
         viewModelScope.launch {
             signInRemoteWithEmailAndPasswordUseCase(userMail, userPassword)
                 .catch { updateMessageErrorForUser(it.message) }
                 .collect { networkResult ->
                     when (networkResult) {
-                        is NetworkResult.Success -> getUserDataAndSaveLocally(networkResult.data as String)
+                        is NetworkResult.Success -> saveLocallyUserData(networkResult.data as UserData)
                         is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
                     }
                 }
         }
     }
 
-    fun snackBarMessageShown() {
-        _uiState.update { it.copy(messageForUser = null) }
-    }
-
-    private suspend fun getUserDataAndSaveLocally(firebaseUserId: String) {
-        getUserDataRemoteUseCase(firebaseUserId)
-            .collect { networkResult ->
-                when (networkResult) {
-                    is NetworkResult.Success -> saveLocallyUserData(networkResult.data as UserData)
-                    is NetworkResult.Error -> updateMessageErrorForUser(networkResult.message)
-                }
-            }
-    }
+    fun snackBarMessageShown() = _uiState.update { it.copy(messageForUser = null) }
 
     private suspend fun saveLocallyUserData(userData: UserData) {
         saveUserDataLocallyUseCase(userData.userName)
         navigateToHome()
     }
 
-    private fun navigateToHome() {
-        _uiState.update { it.copy(navigateToHome = true) }
-    }
+    private fun navigateToHome() = _uiState.update { it.copy(navigateToHome = true) }
 
     private fun checkEnabledSignInButton() {
         val enabledButton = userMail.isNotEmpty() && userPassword.isNotEmpty()
@@ -96,14 +80,10 @@ class SignInViewModel(
         }
     }
 
-    private fun checkUserMail() {
-        _uiState.update { currentState -> currentState.copy(isValidEmail = isValidEmail(userMail)) }
-    }
+    private fun checkUserMail() = _uiState.update { it.copy(isValidEmail = isValidEmail(userMail)) }
 
-    private fun updateMessageErrorForUser(message: String?) {
-        message?.let { messageUser ->
-            _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
-        }
+    private fun updateMessageErrorForUser(message: String?) = message?.let { messageUser ->
+        _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
     }
 
 }

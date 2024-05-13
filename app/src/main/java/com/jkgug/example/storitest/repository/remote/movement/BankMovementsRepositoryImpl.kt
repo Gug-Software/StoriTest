@@ -14,17 +14,16 @@ class BankMovementsRepositoryImpl(
 ) : BankMovementsRepository {
 
     override suspend fun getMovementsData(): Flow<NetworkResult<Any?>> = callbackFlow {
-        firestore.collection(FIRE_STORE_COLLECTION_MOVEMENTS).get()
+        firestore
+            .collection(FIRE_STORE_COLLECTION_MOVEMENTS)
+            .get()
             .addOnSuccessListener { movements ->
                 val movementsMutableList = mutableListOf<BankMovement>()
                 movements.forEach { movementsMutableList.add(bankMovement(it)) }
                 trySend(NetworkResult.Success(movementsMutableList))
-                close()
             }
-            .addOnFailureListener {
-                trySend(NetworkResult.Error(message = it.message))
-                close()
-            }
+            .addOnFailureListener { trySend(NetworkResult.Error(message = it.message)) }
+            .addOnCompleteListener { close() }
         awaitClose()
     }
 

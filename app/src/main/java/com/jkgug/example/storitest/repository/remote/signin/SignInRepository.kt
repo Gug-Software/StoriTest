@@ -14,13 +14,5 @@ interface SignInRepository {
         userPassword: String
     ): Flow<NetworkResult<Any?>>
 
-    /**
-     * Get user data from firestore by firebaseUser
-     * @param firebaseUserId user id from firebase
-     */
-    suspend fun getUserDataFireStore(
-        firebaseUserId: String
-    ): Flow<NetworkResult<Any?>>
-
 
 }

@@ -15,19 +15,19 @@ class BankMovementDetailsRepositoryImpl(
     override fun getMovementDetails(
         movementId: String
     ): Flow<NetworkResult<Any?>> = callbackFlow {
-        firestore.collection(FIRE_STORE_COLLECTION_MOVEMENTS).document(movementId).get()
+        firestore
+            .collection(FIRE_STORE_COLLECTION_MOVEMENTS)
+            .document(movementId)
+            .get()
             .addOnSuccessListener { movement ->
                 if (movement.exists()) {
                     trySend(NetworkResult.Success(movement.toObject(BankMovement::class.java)))
                 } else {
                     trySend(NetworkResult.Error(message = "Movement information not found"))
                 }
-                close()
             }
-            .addOnFailureListener {
-                trySend(NetworkResult.Error(message = it.message))
-                close()
-            }
+            .addOnFailureListener { trySend(NetworkResult.Error(message = it.message)) }
+            .addOnCompleteListener { close() }
         awaitClose()
     }
 }

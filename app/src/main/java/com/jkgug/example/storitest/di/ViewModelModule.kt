@@ -17,15 +17,13 @@ class ViewModelModule {
             // viewmodel
             viewModel {
                 SignUpViewModel(
-                    createUserRemoteWithEmailAndPasswordUseCase = get(),
-                    saveUserDataRemoteUseCase = get()
+                    signUpUseCase = get()
                 )
             }
 
             viewModel {
                 SignInViewModel(
                     signInRemoteWithEmailAndPasswordUseCase = get(),
-                    getUserDataRemoteUseCase = get(),
                     saveUserDataLocallyUseCase = get()
                 )
             }

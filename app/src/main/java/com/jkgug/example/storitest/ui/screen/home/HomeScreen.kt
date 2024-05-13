@@ -20,6 +20,8 @@ import com.jkgug.example.storitest.ui.components.home.HomeBottom
 import com.jkgug.example.storitest.ui.components.home.HomeFake
 import com.jkgug.example.storitest.ui.components.home.HomeTop
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnMovementDetailNavigate
+import com.jkgug.example.storitest.utils.OnNavigate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -27,8 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onMovementClick: (String) -> Unit = {},
-    onLogoutNavigation: () -> Unit,
+    onMovementClick: OnMovementDetailNavigate,
+    onLogoutNavigation: OnNavigate,
 ) {
 
     val paddingL = dimensionResource(R.dimen.padding_l)

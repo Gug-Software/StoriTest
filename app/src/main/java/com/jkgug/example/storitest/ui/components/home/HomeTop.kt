@@ -25,12 +25,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnNavigate
 
 @Composable
 fun HomeTop(
     modifier: Modifier = Modifier,
     userName: String,
-    onLogout: () -> Unit
+    onLogout: OnNavigate
 ) {
 
     val paddingXS = dimensionResource(R.dimen.padding_xs)

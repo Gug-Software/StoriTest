@@ -11,17 +11,10 @@ interface SignUpRepository {
      * @param userMail user email
      * @param userPassword user password
      */
-    suspend fun createUserWithEmailAndPassword(
+    suspend fun signUpUserAndSaveUserData(
         userMail: String,
-        userPassword: String
-    ): Flow<NetworkResult<Any?>>
-
-    /**
-     * Save user data to firestore
-     * @param userData user data
-     */
-    suspend fun saveUserData(
+        userPassword: String,
         userData: UserData
-    ): Flow<NetworkResult<Any>>
+    ): Flow<NetworkResult<Any?>>
 
 }

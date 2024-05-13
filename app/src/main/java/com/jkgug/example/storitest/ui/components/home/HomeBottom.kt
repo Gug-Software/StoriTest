@@ -26,6 +26,7 @@ import com.jkgug.example.storitest.domain.BankMovement
 import com.jkgug.example.storitest.ui.components.common.ErrorView
 import com.jkgug.example.storitest.ui.components.common.IndicatorView
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnMovementDetailNavigate
 
 @Composable
 fun HomeBottom(
@@ -34,7 +35,7 @@ fun HomeBottom(
     messageForUser: String? = null,
     isLoading: Boolean = false,
     onRetryAction: () -> Unit,
-    onMovementClick: (String) -> Unit = {}
+    onMovementClick: OnMovementDetailNavigate
 ) {
 
     val radiusL = dimensionResource(R.dimen.radius_l)
@@ -134,7 +135,8 @@ fun HomeBottomPreview() {
             messageForUser = null,
             isLoading = false,
             onRetryAction = {},
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onMovementClick = {}
         )
     }
 }

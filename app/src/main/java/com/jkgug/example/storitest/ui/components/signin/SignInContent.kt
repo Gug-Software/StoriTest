@@ -27,16 +27,18 @@ import com.jkgug.example.storitest.R
 import com.jkgug.example.storitest.ui.components.common.MailField
 import com.jkgug.example.storitest.ui.components.common.PasswordField
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnFieldValueChanged
+import com.jkgug.example.storitest.utils.SubmitAction
 
 @Composable
 fun SignInContent(
-    onUserMailChanged: (String) -> Unit,
+    onUserMailChanged: OnFieldValueChanged,
     userMailValue: String,
     isValidaMail: Boolean,
-    onUserPasswordChanged: (String) -> Unit,
+    onUserPasswordChanged: OnFieldValueChanged,
     userPasswordValue: String,
     enabledSignInButton: Boolean,
-    onCheckSignIn: () -> Unit,
+    onSignIn: SubmitAction,
     modifier: Modifier,
     isLoading: Boolean,
 ) {
@@ -83,7 +85,7 @@ fun SignInContent(
                 PasswordField(
                     onUserPasswordChanged = onUserPasswordChanged,
                     userPasswordValue = userPasswordValue,
-                    onKeyboardDoneActions = onCheckSignIn,
+                    onKeyboardDoneActions = onSignIn,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = isLoading.not(),
                 )
@@ -106,7 +108,7 @@ fun SignInContent(
                 Button(
                     modifier = Modifier,
                     enabled = enabledSignInButton,
-                    onClick = onCheckSignIn
+                    onClick = onSignIn
                 ) {
                     Text(
                         text = stringResource(R.string.sigin_button),
@@ -136,7 +138,7 @@ fun SignInContentPreview() {
             onUserPasswordChanged = {},
             userPasswordValue = "algo",
             enabledSignInButton = true,
-            onCheckSignIn = { },
+            onSignIn = { },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),

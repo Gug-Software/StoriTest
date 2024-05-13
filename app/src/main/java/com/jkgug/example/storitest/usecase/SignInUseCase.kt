@@ -7,22 +7,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-interface SignInRemoteWithEmailAndPasswordUseCase {
+interface SignInUseCase {
     suspend operator fun invoke(
         userMail: String,
         userPassword: String
     ): Flow<NetworkResult<Any?>>
 }
 
-class SignInRemoteWithEmailAndPasswordUseCaseImpl(
+class SignInUseCaseImpl(
     private val signInRepository: SignInRepository,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
-) : SignInRemoteWithEmailAndPasswordUseCase {
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : SignInUseCase {
     override suspend operator fun invoke(
         userMail: String,
         userPassword: String
     ): Flow<NetworkResult<Any?>> {
-        return withContext(defaultDispatcher) {
+        return withContext(ioDispatcher) {
             signInRepository.signInWithEmailAndPassword(userMail, userPassword)
         }
     }

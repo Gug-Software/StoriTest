@@ -11,12 +11,12 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
-class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
+class SignInUseCaseImplTest {
 
     @Mock
     private lateinit var signInRepository: SignInRepository
 
-    private lateinit var useCase: SignInRemoteWithEmailAndPasswordUseCaseImpl
+    private lateinit var useCase: SignInUseCaseImpl
 
     private val email = "someemail"
     private val password = "somePassword"
@@ -26,7 +26,7 @@ class SignInRemoteWithEmailAndPasswordUseCaseImplTest {
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        useCase = SignInRemoteWithEmailAndPasswordUseCaseImpl(signInRepository)
+        useCase = SignInUseCaseImpl(signInRepository)
     }
 
     @Test

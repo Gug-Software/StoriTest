@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jkgug.example.storitest.domain.UserData
-import com.jkgug.example.storitest.usecase.CreateUserRemoteWithEmailAndPasswordUseCase
-import com.jkgug.example.storitest.usecase.SaveUserDataRemoteUseCase
+import com.jkgug.example.storitest.usecase.SignUpUseCase
 import com.jkgug.example.storitest.utils.NetworkResult
 import com.jkgug.example.storitest.utils.isValidEmail
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
-    private val createUserRemoteWithEmailAndPasswordUseCase: CreateUserRemoteWithEmailAndPasswordUseCase,
-    private val saveUserDataRemoteUseCase: SaveUserDataRemoteUseCase
+    private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -70,49 +68,32 @@ class SignUpViewModel(
         _uiState.update { it.copy(messageForUser = null) }
     }
 
-    fun checkSignUp() {
+    fun signUp() {
         _uiState.update { currentState -> currentState.copy(loading = true) }
-        val userData = getCurrentUserData()
         viewModelScope.launch {
-            createUserRemoteWithEmailAndPasswordUseCase(userMail, userPassword)
-                .catch { throwable ->
-                    updateMessageErrorForUser(throwable.message)
-                }
+            signUpUseCase(
+                userMail,
+                userPassword,
+                getCurrentUserData()
+            ).catch { updateMessageErrorForUser(it.message) }
                 .collect { createResult ->
                     when (createResult) {
                         is NetworkResult.Error -> updateMessageErrorForUser(createResult.message)
-                        is NetworkResult.Success -> saveUserInFireStore(userData)
+                        is NetworkResult.Success -> navigateToSuccess()
                     }
                 }
         }
     }
 
+    private fun navigateToSuccess() = _uiState.update { it.copy(navigateToSuccess = true) }
+
     private fun getCurrentUserData() = UserData(userName = userName, userLastName = userLastName)
 
-    private fun saveUserInFireStore(userData: UserData) {
-        viewModelScope.launch {
-            saveUserDataRemoteUseCase(userData).catch { throwable ->
-                updateMessageErrorForUser(throwable.message)
-            }.collect { saveResult ->
-                when (saveResult) {
-                    is NetworkResult.Error -> updateMessageErrorForUser(saveResult.message)
-                    is NetworkResult.Success -> _uiState.update { it.copy(navigateToSuccess = true) }
-                }
-            }
-        }
+    private fun updateMessageErrorForUser(message: String?) = message?.let { messageUser ->
+        _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
     }
 
-    private fun updateMessageErrorForUser(message: String?) {
-        message?.let { messageUser ->
-            _uiState.update { it.copy(messageForUser = messageUser, loading = false) }
-        }
-    }
-
-    private fun checkUserMail() {
-        _uiState.update { currentState ->
-            currentState.copy(isValidEmail = isValidEmail(userMail))
-        }
-    }
+    private fun checkUserMail() = _uiState.update { it.copy(isValidEmail = isValidEmail(userMail)) }
 
     private fun checkEnabledSignInButton() {
         val enabledButton = userMail.isNotEmpty()

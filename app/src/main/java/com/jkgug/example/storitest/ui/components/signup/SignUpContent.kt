@@ -26,20 +26,22 @@ import com.jkgug.example.storitest.ui.components.common.CommonFormField
 import com.jkgug.example.storitest.ui.components.common.MailField
 import com.jkgug.example.storitest.ui.components.common.PasswordField
 import com.jkgug.example.storitest.ui.theme.StoriTestTheme
+import com.jkgug.example.storitest.utils.OnFieldValueChanged
+import com.jkgug.example.storitest.utils.SubmitAction
 
 @Composable
 fun SignUpContent(
-    onUserNameChanged: (String) -> Unit,
+    onUserNameChanged: OnFieldValueChanged,
     userNameValue: String,
-    onUserLastNameChanged: (String) -> Unit,
+    onUserLastNameChanged: OnFieldValueChanged,
     userLastNameValue: String,
-    onUserMailChanged: (String) -> Unit,
+    onUserMailChanged: OnFieldValueChanged,
     userMailValue: String,
     isValidaMail: Boolean,
-    onUserPasswordChanged: (String) -> Unit,
+    onUserPasswordChanged: OnFieldValueChanged,
     userPasswordValue: String,
     enabledSignInButton: Boolean,
-    onCheckSignUp: () -> Unit,
+    onCheckSignUp: SubmitAction,
     modifier: Modifier,
     isLoading: Boolean
 ) {
